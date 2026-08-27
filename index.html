@@ -561,18 +561,22 @@
     .order-stepper {
       display: flex;
       align-items: stretch;
+      justify-content: center;
     }
     .order-stepper .qty-btn {
-      width: 32px;
+      width: 36px;
       height: 36px;
       font-size: 1.2rem;
+      flex-shrink: 0;
     }
     .order-stepper input {
       border-left: none !important;
       border-right: none !important;
       text-align: center;
       width: 60px;
+      height: 36px;
       font-size: 1rem;
+      padding: 0;
       -moz-appearance: textfield;
     }
     .order-stepper input::-webkit-outer-spin-button,
@@ -596,14 +600,18 @@
       .field input[type="date"],
       .field input[type="time"] { min-width: 0; }
       .tooltip {
-        left: auto;
-        right: -0.5rem;
+        position: fixed;
+        top: auto;
+        bottom: auto;
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+        max-width: none;
         transform: none;
+        z-index: 200;
       }
       .tooltip::before {
-        left: auto;
-        right: 1rem;
-        transform: none;
+        display: none;
       }
     }
   </style>
@@ -874,8 +882,21 @@
 
     function toggleTooltip(el) {
       var wasActive = el.classList.contains("active");
-      document.querySelectorAll(".info-btn.active").forEach(function(e) { e.classList.remove("active"); });
-      if (!wasActive) el.classList.add("active");
+      document.querySelectorAll(".info-btn.active").forEach(function(e) {
+        e.classList.remove("active");
+        var tt = e.querySelector(".tooltip");
+        if (tt) tt.style.top = "";
+      });
+      if (!wasActive) {
+        el.classList.add("active");
+        if (window.innerWidth <= 500) {
+          var tt = el.querySelector(".tooltip");
+          if (tt) {
+            var rect = el.getBoundingClientRect();
+            tt.style.top = (rect.bottom + 8) + "px";
+          }
+        }
+      }
     }
 
     document.addEventListener("click", function(e) {
