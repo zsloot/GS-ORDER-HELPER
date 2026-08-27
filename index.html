@@ -40,16 +40,21 @@
       margin-bottom: 0.5rem;
     }
 
-    header h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
     header p {
       color: var(--text2);
       margin-top: 0.25rem;
       font-size: 0.95rem;
+    }
+
+    .disclaimer {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.8rem;
+      color: #6d4c00;
+      line-height: 1.45;
     }
 
     .card {
@@ -87,7 +92,7 @@
       color: var(--text2);
     }
 
-    input[type="number"], select {
+    input[type="number"], input[type="date"], input[type="time"], input[type="text"], select {
       padding: 0.5rem 0.75rem;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -96,13 +101,12 @@
       background: var(--bg);
     }
 
-    input[type="number"]:focus, select:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 2px var(--accent-light);
     }
 
-    /* Sub item rows */
     .sub-grid {
       display: grid;
       grid-template-columns: 1fr auto auto;
@@ -120,14 +124,8 @@
       border-bottom: 1px solid #eee;
     }
 
-    .sub-name {
-      font-size: 0.9rem;
-    }
-
-    .sub-name small {
-      color: var(--text2);
-      font-size: 0.8rem;
-    }
+    .sub-name { font-size: 0.9rem; }
+    .sub-name small { color: var(--text2); font-size: 0.8rem; }
 
     .sub-price {
       font-size: 0.85rem;
@@ -165,7 +163,6 @@
     .tag-v { background: #d8f3dc; color: #2d6a4f; }
     .tag-vg { background: #fde2c8; color: #b35e1c; }
 
-    /* Drinks */
     .drink-grid {
       display: grid;
       grid-template-columns: 1fr auto auto;
@@ -173,7 +170,6 @@
       align-items: center;
     }
 
-    /* Default order display */
     .defaults-display {
       background: var(--accent-light);
       border-radius: 8px;
@@ -191,16 +187,44 @@
       padding: 0.15rem 0;
     }
 
-    .section-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: var(--text2);
-      margin: 0.75rem 0 0.5rem;
+    /* Checkbox row */
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
     }
 
-    /* Results */
+    .check-row input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 18px;
+      height: 18px;
+    }
+
+    .check-row span {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .delivery-fields {
+      display: none;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .delivery-fields.visible { display: block; }
+
+    .delivery-note {
+      font-size: 0.8rem;
+      color: var(--text2);
+      font-style: italic;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    /* Buttons */
     .btn {
       display: block;
       width: 100%;
@@ -217,6 +241,16 @@
     }
 
     .btn:hover { background: #235a3f; }
+
+    .btn-request {
+      background: #1a1a1a;
+      margin-top: 1rem;
+      font-size: 1.05rem;
+      padding: 0.85rem;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-request:hover { background: #333; }
 
     .error-msg {
       color: var(--error);
@@ -323,6 +357,11 @@
       <p>Catering Order Helper</p>
     </header>
 
+    <div class="disclaimer">
+      Prices shown are estimates and may have changed since this page was published.
+      This is a request only — no order will be placed without confirmation from our team.
+    </div>
+
     <!-- Group size -->
     <div class="card">
       <h2>Group Details</h2>
@@ -387,6 +426,37 @@
       <div class="drink-grid" id="drinksGrid"></div>
     </div>
 
+    <!-- Pickup / Delivery -->
+    <div class="card">
+      <h2>Pickup Time Request</h2>
+      <div class="form-row">
+        <div class="field">
+          <label for="pickupDate">Date</label>
+          <input type="date" id="pickupDate">
+        </div>
+        <div class="field">
+          <label for="pickupTime">Time</label>
+          <input type="time" id="pickupTime" value="11:00">
+        </div>
+      </div>
+
+      <label class="check-row">
+        <input type="checkbox" id="requestDelivery" onchange="toggleDelivery()">
+        <span>REQUEST DELIVERY</span>
+      </label>
+
+      <div id="deliveryFields" class="delivery-fields">
+        <div class="field">
+          <label for="deliveryAddress">Delivery Address</label>
+          <input type="text" id="deliveryAddress" placeholder="Full street address">
+        </div>
+        <p class="delivery-note">
+          Delivery cannot be guaranteed. Delivery charges will be calculated based on
+          time, staff availability, and location, and confirmed separately.
+        </p>
+      </div>
+    </div>
+
     <button class="btn" onclick="generateOrder()">Generate Order</button>
     <div id="errorMsg" class="error-msg"></div>
 
@@ -424,8 +494,10 @@
         </div>
 
         <p class="note">
-          All prices in CAD. Estimates based on current menu — contact us to finalize your catering order.
+          All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.
         </p>
+
+        <button class="btn btn-request" onclick="requestOrder()">REQUEST ORDER</button>
       </div>
     </div>
   </div>
@@ -436,13 +508,11 @@
     // Source: https://goldstandardsandwich.square.site
     // ──────────────────────────────────────────
 
-    // Default ratios: 76% meat, 24% vegetarian (54% kale / 46% impossible)
     const MEAT_RATIO = 0.76;
     const VEG_RATIO = 0.24;
     const KALE_SHARE = 13 / 24;
     const IMPOSSIBLE_SHARE = 11 / 24;
 
-    // Default items
     const DEFAULTS = {
       meat:      { name: "Gold Standard (Bacon)", desc: "Bacon, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin", price: 9.50 },
       kale:      { name: "Gold Standard (Kale)", desc: "Kale, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin", price: 9.50, tag: "v" },
@@ -450,7 +520,6 @@
       vegan:     { name: "The Alternative", desc: "Vegan hummus, mustard, sprouts, mushrooms, chimichurri, pickles, pickled red onion, English muffin", price: 9.50, tag: "vg" },
     };
 
-    // Substitution options
     const MEAT_SUBS = [
       { id: "baconkale", name: "Gold Standard (Bacon & Kale)", price: 10.75 },
       { id: "bulldog",   name: "Bulldog Butty", price: 11.00, note: "Queen St." },
@@ -466,16 +535,15 @@
     ];
 
     const DRINKS = [
-      { id: "coffee",   name: "Coffee (Medium)", price: 2.50, note: "Queen St." },
-      { id: "coffee_l", name: "Coffee (Large)", price: 3.25, note: "Queen St." },
-      { id: "juice",    name: "Juice", price: 6.50 },
-      { id: "water",    name: "Water (Flow 500mL)", price: 3.50 },
-      { id: "mex_coke", name: "Mexican Coca-Cola", price: 4.00 },
-      { id: "mate",     name: "Mate Libre", price: 4.00 },
-      { id: "zamalek",  name: "Zamalek (Hibiscus)", price: 5.35 },
-      { id: "crodino",  name: "Crodino", price: 3.50 },
-      { id: "lacroix",  name: "La Croix", price: 3.25 },
-      { id: "coconut",  name: "Coconut Water", price: 3.50 },
+      { id: "juice_tang", name: "Juice (Tangerine)", price: 7.00 },
+      { id: "juice_seas", name: "Juice (Seasonal)", price: 7.00 },
+      { id: "water",      name: "Water (Flow 500mL)", price: 3.50 },
+      { id: "mex_coke",   name: "Mexican Coca-Cola", price: 4.00 },
+      { id: "mate",       name: "Mate Libre", price: 4.00 },
+      { id: "zamalek",    name: "Zamalek (Hibiscus)", price: 5.35 },
+      { id: "crodino",    name: "Crodino", price: 3.50 },
+      { id: "lacroix",    name: "La Croix", price: 3.25 },
+      { id: "coconut",    name: "Coconut Water", price: 3.50 },
     ];
 
     function fmt(n) { return "$" + n.toFixed(2); }
@@ -508,6 +576,11 @@
 
     function getVal(id) { return parseInt(document.getElementById(id).value) || 0; }
 
+    function toggleDelivery() {
+      const el = document.getElementById("deliveryFields");
+      el.classList.toggle("visible", document.getElementById("requestDelivery").checked);
+    }
+
     function calcDefaults() {
       const total = getVal("totalPeople");
       const ratio = parseFloat(document.getElementById("perPerson").value);
@@ -520,17 +593,14 @@
       let meatDefault = Math.round(remaining * MEAT_RATIO);
       let vegDefault = remaining - meatDefault;
 
-      // Subtract meat substitutions
       let meatSubTotal = 0;
       for (const s of MEAT_SUBS) meatSubTotal += getVal("sub_" + s.id);
       meatDefault = Math.max(0, meatDefault - meatSubTotal);
 
-      // Subtract veg substitutions
       let vegSubTotal = 0;
       for (const s of VEG_SUBS) vegSubTotal += getVal("sub_" + s.id);
       vegDefault = Math.max(0, vegDefault - vegSubTotal);
 
-      // Split vegetarian defaults into kale / impossible
       let kaleCount = Math.round(vegDefault * KALE_SHARE);
       let impCount = vegDefault - kaleCount;
 
@@ -540,7 +610,6 @@
     function updateDefaults() {
       const d = calcDefaults();
       const el = document.getElementById("defaultsDisplay");
-
       el.innerHTML = `
         <div class="def-line"><span><strong>Total items:</strong> ${d.totalItems}</span></div>
         <div class="def-line"><span>Meat — GS Bacon: ${d.meatDefault}</span><span>${fmt(d.meatDefault * DEFAULTS.meat.price)}</span></div>
@@ -550,6 +619,9 @@
         ${d.vegSubTotal > 0 ? `<div class="def-line"><span style="font-size:0.8rem;">↳ ${d.vegSubTotal} vegetarian sub(s) applied</span></div>` : ""}
       `;
     }
+
+    // Store last generated order for the email
+    let lastOrder = null;
 
     function generateOrder() {
       const errorEl = document.getElementById("errorMsg");
@@ -564,42 +636,36 @@
       if (total < 1) { errorEl.textContent = "Enter at least 1 person."; return; }
       if (veganCount > total) { errorEl.textContent = "Vegan count exceeds total people."; return; }
 
-      const d = calcDefaults();
+      const pickupDate = document.getElementById("pickupDate").value;
+      const pickupTime = document.getElementById("pickupTime").value;
+      if (!pickupDate) { errorEl.textContent = "Please select a pickup date."; return; }
+      if (!pickupTime) { errorEl.textContent = "Please select a pickup time."; return; }
 
-      // Build order lines
+      const d = calcDefaults();
       const lines = [];
 
-      // Default meat
       if (d.meatDefault > 0) {
         lines.push({ name: DEFAULTS.meat.name, desc: DEFAULTS.meat.desc, qty: d.meatDefault, price: DEFAULTS.meat.price, tags: [] });
       }
-
-      // Meat subs
       for (const s of MEAT_SUBS) {
         const qty = getVal("sub_" + s.id);
         if (qty > 0) lines.push({ name: s.name, desc: s.note || "", qty, price: s.price, tags: [] });
       }
-
-      // Default vegetarian
       if (d.kaleCount > 0) {
         lines.push({ name: DEFAULTS.kale.name, desc: DEFAULTS.kale.desc, qty: d.kaleCount, price: DEFAULTS.kale.price, tags: ["v"] });
       }
       if (d.impCount > 0) {
         lines.push({ name: DEFAULTS.impossible.name, desc: DEFAULTS.impossible.desc, qty: d.impCount, price: DEFAULTS.impossible.price, tags: ["v"] });
       }
-
-      // Veg subs
       for (const s of VEG_SUBS) {
         const qty = getVal("sub_" + s.id);
         if (qty > 0) lines.push({ name: s.name, desc: s.note || "", qty, price: s.price, tags: ["v"] });
       }
-
-      // Vegan
       if (d.veganItems > 0) {
         lines.push({ name: DEFAULTS.vegan.name, desc: DEFAULTS.vegan.desc, qty: d.veganItems, price: DEFAULTS.vegan.price, tags: ["vg"] });
       }
 
-      // Render food
+      // Render food table
       const foodRows = document.getElementById("foodRows");
       foodRows.innerHTML = "";
       let foodTotal = 0;
@@ -611,8 +677,8 @@
         foodQty += line.qty;
         const tagHtml = line.tags.map(t => {
           const cls = t === "v" ? "tag-v" : "tag-vg";
-          const label = t === "v" ? "V" : "VG";
-          return `<span class="diet-tag ${cls}">${label}</span>`;
+          const lbl = t === "v" ? "V" : "VG";
+          return `<span class="diet-tag ${cls}">${lbl}</span>`;
         }).join("");
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -629,38 +695,86 @@
       drinkRowsEl.innerHTML = "";
       let drinksTotal = 0;
       let hasDrinks = false;
+      const drinkLines = [];
 
-      for (const d of DRINKS) {
-        const qty = getVal("drink_" + d.id);
+      for (const dk of DRINKS) {
+        const qty = getVal("drink_" + dk.id);
         if (qty > 0) {
           hasDrinks = true;
-          const linePrice = qty * d.price;
+          const linePrice = qty * dk.price;
           drinksTotal += linePrice;
+          drinkLines.push({ name: dk.name, qty, price: dk.price });
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${d.name}</td><td>${qty}</td><td>${fmt(linePrice)}</td>`;
+          tr.innerHTML = `<td>${dk.name}</td><td>${qty}</td><td>${fmt(linePrice)}</td>`;
           drinkRowsEl.appendChild(tr);
         }
       }
       drinksSection.style.display = hasDrinks ? "block" : "none";
 
-      // Totals
+      // Totals: service fee is 18% on top of (subtotal + tax)
       const subtotal = foodTotal + drinksTotal;
-      const serviceFee = subtotal * 0.15;
       const hst = subtotal * 0.13;
-      const grandTotal = subtotal + serviceFee + hst;
+      const serviceFee = (subtotal + hst) * 0.18;
+      const grandTotal = subtotal + hst + serviceFee;
 
       document.getElementById("totalsRows").innerHTML = `
         <tr><td>Subtotal</td><td>${fmt(subtotal)}</td></tr>
-        <tr><td>Service Fee (15%)</td><td>${fmt(serviceFee)}</td></tr>
         <tr><td>HST (13%)</td><td>${fmt(hst)}</td></tr>
+        <tr><td>Service Fee (18%)</td><td>${fmt(serviceFee)}</td></tr>
         <tr class="total-row"><td>Estimated Total</td><td>${fmt(grandTotal)}</td></tr>
       `;
 
       document.getElementById("summaryBanner").textContent =
         `${foodQty} food items for ${total} people — estimated total: ${fmt(grandTotal)} CAD`;
 
+      // Store for email
+      lastOrder = { lines, drinkLines, total, foodQty, subtotal, hst, serviceFee, grandTotal };
+
       resultsEl.style.display = "block";
       resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function requestOrder() {
+      if (!lastOrder) return;
+
+      const pickupDate = document.getElementById("pickupDate").value;
+      const pickupTime = document.getElementById("pickupTime").value;
+      const isDelivery = document.getElementById("requestDelivery").checked;
+      const deliveryAddr = document.getElementById("deliveryAddress").value;
+
+      // Format date nicely
+      const dateObj = new Date(pickupDate + "T" + pickupTime);
+      const dateStr = dateObj.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+      const timeStr = dateObj.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+      const pickupStr = isDelivery
+        ? `Delivery on ${dateStr} at ${timeStr} to: ${deliveryAddr}`
+        : `Pickup on ${dateStr} at ${timeStr}`;
+
+      // Build order summary
+      let orderDetails = "";
+      for (const line of lastOrder.lines) {
+        orderDetails += `${line.qty}x ${line.name}\n`;
+      }
+      for (const dk of lastOrder.drinkLines) {
+        orderDetails += `${dk.qty}x ${dk.name}\n`;
+      }
+      orderDetails += `\nSubtotal: ${fmt(lastOrder.subtotal)}\n`;
+      orderDetails += `HST (13%): ${fmt(lastOrder.hst)}\n`;
+      orderDetails += `Service Fee (18%): ${fmt(lastOrder.serviceFee)}\n`;
+      orderDetails += `Estimated Total: ${fmt(lastOrder.grandTotal)} CAD\n`;
+
+      const body = `Hey! I'd like to request a catering order for the following:\n\n${pickupStr}\n\n${orderDetails}\nThanks so much, looking forward to hearing back from you.`;
+
+      const mailtoUrl = `mailto:goldstandard@thefed.ca?subject=${encodeURIComponent("CATERING REQUEST")}&body=${encodeURIComponent(body)}`;
+
+      window.location.href = mailtoUrl;
+    }
+
+    // Set default pickup date to tomorrow
+    function initDate() {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById("pickupDate").value = tomorrow.toISOString().split("T")[0];
     }
 
     // Initialize
@@ -668,6 +782,7 @@
     buildSubRows(document.getElementById("vegSubs"), VEG_SUBS);
     buildDrinkRows(document.getElementById("drinksGrid"), DRINKS);
     updateDefaults();
+    initDate();
   </script>
 </body>
 </html>
