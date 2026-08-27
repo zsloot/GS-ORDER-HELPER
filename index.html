@@ -33,7 +33,7 @@
       max-width: 500px;
       width: 100%;
       height: auto;
-      margin-bottom: 0;
+      margin-bottom: -0.5rem;
     }
 
     header h1 {
@@ -384,9 +384,9 @@
       letter-spacing: 0.5rem;
     }
 
-    .star-black { color: #1a1a1a; }
+    .star-black { color: #1a1a1a; position: relative; top: 3px; }
     .star-maroon { color: #800020; }
-    .star-amber { color: #d4a017; }
+    .star-amber { color: #d4a017; position: relative; top: -3px; }
 
     .error-msg {
       color: #c0392b;
@@ -473,6 +473,7 @@
       font-size: 0.8rem;
       color: #555;
       margin-top: 0.75rem;
+      text-align: center;
       font-style: italic;
     }
 
@@ -556,6 +557,28 @@
     .footer-stat { white-space: nowrap; }
     .footer-total { font-weight: 700; font-size: 0.95rem; }
 
+    /* ── Sticky star logo ── */
+    .sticky-star {
+      position: fixed;
+      top: 0.5rem;
+      left: 0.75rem;
+      z-index: 50;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .sticky-star.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .sticky-star img {
+      width: 36px;
+      height: 36px;
+    }
+
     /* ── Mobile ── */
     @media (max-width: 500px) {
       header h1 { font-size: 1.8rem; }
@@ -569,6 +592,9 @@
   </style>
 </head>
 <body>
+  <div class="sticky-star" id="stickyStar">
+    <img src="GS-star.png" alt="GS">
+  </div>
   <div class="container">
     <header>
       <img src="logo.png" alt="Gold Standard">
@@ -1121,6 +1147,17 @@
       observer.observe(sentinel);
     }
 
+    function setupStarObserver() {
+      var logo = document.querySelector("header img");
+      var star = document.getElementById("stickyStar");
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          star.classList.toggle("visible", !entry.isIntersecting);
+        });
+      }, { threshold: 0 });
+      observer.observe(logo);
+    }
+
     function initDate() {
       var tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1158,6 +1195,7 @@
         recalcDefaults();
         initDate();
         setupFooterObserver();
+        setupStarObserver();
       } catch (e) {
         document.querySelector(".container").innerHTML =
           '<p style="color:red;text-align:center;padding:2rem;">Failed to load menu data. Please refresh the page.</p>';
