@@ -356,17 +356,37 @@
 
     .btn-request:hover { background: #333; }
 
-    .download-link {
+    .action-links {
       text-align: center;
-      font-size: 0.85rem;
-      color: #555;
-      text-decoration: underline;
-      cursor: pointer;
       margin-top: 0.6rem;
       padding: 0.3rem;
     }
 
+    .action-sep {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .download-link {
+      font-size: 0.85rem;
+      color: #555;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     .download-link:hover { color: #1a1a1a; }
+
+    .three-stars {
+      text-align: center;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      letter-spacing: 0.5rem;
+    }
+
+    .star-black { color: #1a1a1a; }
+    .star-maroon { color: #800020; }
+    .star-amber { color: #d4a017; }
 
     .error-msg {
       color: #c0392b;
@@ -510,10 +530,6 @@
       right: 0;
       background: #1a1a1a;
       color: #fff;
-      padding: 0.6rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       font-size: 0.8rem;
       z-index: 50;
       transform: translateY(0);
@@ -521,6 +537,15 @@
     }
 
     .sticky-footer.hidden { transform: translateY(100%); }
+
+    .footer-inner {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 0.6rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
     .footer-stats {
       display: flex;
@@ -652,23 +677,34 @@
     </div>
 
     <button type="button" class="btn-request" id="requestBtn" onclick="requestOrder()">Request Order by Email</button>
-    <p class="download-link" id="shareBtn" onclick="shareOrder()">Share Order</p>
-    <p class="download-link" id="downloadBtn" onclick="downloadOrder()">Download Order</p>
+    <p class="action-links">
+      <span class="download-link" id="shareBtn" onclick="shareOrder()">Share Order</span>
+      <span class="action-sep"> — </span>
+      <span class="download-link" id="downloadBtn" onclick="downloadOrder()">Download Order</span>
+    </p>
     <div id="errorMsg" class="error-msg"></div>
 
     <p class="note" style="margin-top:1rem;">
       All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.
     </p>
+
+    <div class="three-stars">
+      <span class="star star-black">★</span>
+      <span class="star star-maroon">★</span>
+      <span class="star star-amber">★</span>
+    </div>
   </div>
 
   <div class="sticky-footer hidden" id="stickyFooter">
-    <div class="footer-stats">
-      <span class="footer-stat" id="footMeat">Meat: 0</span>
-      <span class="footer-stat" id="footVeg">Veg: 0</span>
-      <span class="footer-stat" id="footDrinks">Drinks: 0</span>
-      <span class="footer-stat" id="footItems">Items: 0</span>
+    <div class="footer-inner">
+      <div class="footer-stats">
+        <span class="footer-stat" id="footMeat">Meat: 0</span>
+        <span class="footer-stat" id="footVeg">Veg: 0</span>
+        <span class="footer-stat" id="footDrinks">Drinks: 0</span>
+        <span class="footer-stat" id="footItems">Items: 0</span>
+      </div>
+      <span class="footer-total" id="footTotal">$0.00</span>
     </div>
-    <span class="footer-total" id="footTotal">$0.00</span>
   </div>
 
   <script>
