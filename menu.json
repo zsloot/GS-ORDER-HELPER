@@ -34,15 +34,15 @@
 
   "meatSubs": [
     { "id": "baconkale", "name": "Gold Standard (Bacon & Kale)", "price": 10.75 },
-    { "id": "bulldog",   "name": "Bulldog Butty",                "price": 11.00, "note": "Queen St." },
+    { "id": "bulldog",   "name": "Bulldog Butty",                "price": 11.00 },
     { "id": "telway",    "name": "Telway Burger",                "price": 9.50 },
     { "id": "fourguys",  "name": "Four Guys Burger",             "price": 13.00 },
-    { "id": "burrito",   "name": "Breakfast Burrito",            "price": 15.00, "note": "Queen St." }
+    { "id": "burrito",   "name": "Breakfast Burrito",            "price": 15.00 }
   ],
 
   "vegSubs": [
     { "id": "impossible_melt", "name": "Impossible Melt",                "price": 12.00, "tag": "v" },
-    { "id": "burrito_imp",     "name": "Breakfast Burrito (Impossible)", "price": 17.00, "tag": "v", "note": "Queen St." }
+    { "id": "burrito_imp",     "name": "Breakfast Burrito (Impossible)", "price": 17.00, "tag": "v" }
   ],
 
   "drinks": [
