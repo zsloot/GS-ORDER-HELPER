@@ -33,16 +33,16 @@
   },
 
   "meatSubs": [
-    { "id": "baconkale", "name": "Gold Standard (Bacon & Kale)", "price": 10.75 },
-    { "id": "bulldog",   "name": "Bulldog Butty",                "price": 11.00 },
-    { "id": "telway",    "name": "Telway Burger",                "price": 9.50 },
-    { "id": "fourguys",  "name": "Four Guys Burger",             "price": 13.00 },
-    { "id": "burrito",   "name": "Breakfast Burrito",            "price": 15.00 }
+    { "id": "baconkale", "name": "Gold Standard (Bacon & Kale)", "desc": "Kale, bacon, scrambled egg, real cheddar, house aioli, pickles, hot sauce, English muffin", "price": 10.75 },
+    { "id": "bulldog",   "name": "Bulldog Butty",                "desc": "Bacon, bulldog sauce, kewpie mayo, onion, cabbage, hot sauce", "price": 11.00, "note": "Queen St." },
+    { "id": "telway",    "name": "Telway Burger",                "desc": "Detroit style, all beef patty, mustard, pickles, onion, American cheese, potato roll", "price": 9.50 },
+    { "id": "fourguys",  "name": "Four Guys Burger",             "desc": "Double patty, bacon, American cheese, pickles, caramelized onion, mustard, special sauce, lettuce", "price": 13.00 },
+    { "id": "burrito",   "name": "Breakfast Burrito",            "desc": "Beef chili, cheesy eggs, avocado crema, chips, salsa, pickled jalapeño", "price": 15.00, "note": "Queen St." }
   ],
 
   "vegSubs": [
-    { "id": "impossible_melt", "name": "Impossible Melt",                "price": 12.00, "tag": "v" },
-    { "id": "burrito_imp",     "name": "Breakfast Burrito (Impossible)", "price": 17.00, "tag": "v" }
+    { "id": "impossible_melt", "name": "Impossible Melt",                "desc": "Vegetarian patty, American & Swiss cheese, pickles, mustard, caramelized onion, special sauce, bun", "price": 12.00, "tag": "v" },
+    { "id": "burrito_imp",     "name": "Breakfast Burrito (Impossible)", "desc": "Impossible, cheesy eggs, avocado crema, chips, salsa, pickled jalapeño", "price": 17.00, "tag": "v", "note": "Queen St." }
   ],
 
   "drinks": [
