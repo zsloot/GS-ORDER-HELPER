@@ -1,0 +1,58 @@
+{
+  "ratios": {
+    "meat": 0.76,
+    "vegetarian": 0.24,
+    "kaleShare": 0.5417,
+    "impossibleShare": 0.4583
+  },
+
+  "defaults": {
+    "meat": {
+      "name": "Gold Standard (Bacon)",
+      "desc": "Bacon, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin",
+      "price": 9.50
+    },
+    "kale": {
+      "name": "Gold Standard (Kale)",
+      "desc": "Kale, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin",
+      "price": 9.50,
+      "tag": "v"
+    },
+    "impossible": {
+      "name": "Gold Standard (Impossible)",
+      "desc": "Impossible sausage, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin",
+      "price": 10.50,
+      "tag": "v"
+    },
+    "vegan": {
+      "name": "The Alternative",
+      "desc": "Vegan hummus, mustard, sprouts, mushrooms, chimichurri, pickles, pickled red onion, English muffin",
+      "price": 9.50,
+      "tag": "vg"
+    }
+  },
+
+  "meatSubs": [
+    { "id": "baconkale", "name": "Gold Standard (Bacon & Kale)", "price": 10.75 },
+    { "id": "bulldog",   "name": "Bulldog Butty",                "price": 11.00, "note": "Queen St." },
+    { "id": "telway",    "name": "Telway Burger",                "price": 9.50 },
+    { "id": "fourguys",  "name": "Four Guys Burger",             "price": 13.00 },
+    { "id": "burrito",   "name": "Breakfast Burrito",            "price": 15.00, "note": "Queen St." }
+  ],
+
+  "vegSubs": [
+    { "id": "impossible_melt", "name": "Impossible Melt",                "price": 12.00, "tag": "v" },
+    { "id": "burrito_imp",     "name": "Breakfast Burrito (Impossible)", "price": 17.00, "tag": "v", "note": "Queen St." }
+  ],
+
+  "drinks": [
+    { "id": "juice_tang", "name": "Juice (Tangerine)",  "price": 7.00 },
+    { "id": "juice_seas", "name": "Juice (Seasonal)",   "price": 7.00 },
+    { "id": "water",      "name": "Water (Flow 500mL)", "price": 3.50 },
+    { "id": "mex_coke",   "name": "Mexican Coca-Cola",  "price": 4.00 },
+    { "id": "mate",       "name": "Mate Libre",         "price": 4.00 },
+    { "id": "zamalek",    "name": "Zamalek (Hibiscus)", "price": 5.35 },
+    { "id": "lacroix",    "name": "La Croix",           "price": 3.25 },
+    { "id": "coconut",    "name": "Coconut Water",      "price": 3.50 }
+  ]
+}

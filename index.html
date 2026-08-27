@@ -503,46 +503,8 @@
   </div>
 
   <script>
-    // ──────────────────────────────────────────
-    // Gold Standard menu
-    // Source: https://goldstandardsandwich.square.site
-    // ──────────────────────────────────────────
-
-    const MEAT_RATIO = 0.76;
-    const VEG_RATIO = 0.24;
-    const KALE_SHARE = 13 / 24;
-    const IMPOSSIBLE_SHARE = 11 / 24;
-
-    const DEFAULTS = {
-      meat:      { name: "Gold Standard (Bacon)", desc: "Bacon, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin", price: 9.50 },
-      kale:      { name: "Gold Standard (Kale)", desc: "Kale, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin", price: 9.50, tag: "v" },
-      impossible:{ name: "Gold Standard (Impossible)", desc: "Impossible sausage, cheesy eggs, aioli, pickles, Marie Sharp's, English muffin", price: 10.50, tag: "v" },
-      vegan:     { name: "The Alternative", desc: "Vegan hummus, mustard, sprouts, mushrooms, chimichurri, pickles, pickled red onion, English muffin", price: 9.50, tag: "vg" },
-    };
-
-    const MEAT_SUBS = [
-      { id: "baconkale", name: "Gold Standard (Bacon & Kale)", price: 10.75 },
-      { id: "bulldog",   name: "Bulldog Butty", price: 11.00, note: "Queen St." },
-      { id: "telway",    name: "Telway Burger", price: 9.50 },
-      { id: "fourguys",  name: "Four Guys Burger", price: 13.00 },
-      { id: "burrito",   name: "Breakfast Burrito", price: 15.00, note: "Queen St." },
-    ];
-
-    const VEG_SUBS = [
-      { id: "impossible_melt", name: "Impossible Melt", price: 12.00, tag: "v" },
-      { id: "burrito_imp",     name: "Breakfast Burrito (Impossible)", price: 17.00, tag: "v", note: "Queen St." },
-    ];
-
-    const DRINKS = [
-      { id: "juice_tang", name: "Juice (Tangerine)", price: 7.00 },
-      { id: "juice_seas", name: "Juice (Seasonal)", price: 7.00 },
-      { id: "water",      name: "Water (Flow 500mL)", price: 3.50 },
-      { id: "mex_coke",   name: "Mexican Coca-Cola", price: 4.00 },
-      { id: "mate",       name: "Mate Libre", price: 4.00 },
-      { id: "zamalek",    name: "Zamalek (Hibiscus)", price: 5.35 },
-      { id: "lacroix",    name: "La Croix", price: 3.25 },
-      { id: "coconut",    name: "Coconut Water", price: 3.50 },
-    ];
+    let MEAT_RATIO, VEG_RATIO, KALE_SHARE, IMPOSSIBLE_SHARE;
+    let DEFAULTS, MEAT_SUBS, VEG_SUBS, DRINKS;
 
     function fmt(n) { return "$" + n.toFixed(2); }
 
@@ -618,7 +580,6 @@
       `;
     }
 
-    // Store last generated order for the email
     let lastOrder = null;
 
     function generateOrder() {
@@ -663,7 +624,6 @@
         lines.push({ name: DEFAULTS.vegan.name, desc: DEFAULTS.vegan.desc, qty: d.veganItems, price: DEFAULTS.vegan.price, tags: ["vg"] });
       }
 
-      // Render food table
       const foodRows = document.getElementById("foodRows");
       foodRows.innerHTML = "";
       let foodTotal = 0;
@@ -687,7 +647,6 @@
         foodRows.appendChild(tr);
       }
 
-      // Render drinks
       const drinkRowsEl = document.getElementById("drinkRows");
       const drinksSection = document.getElementById("drinksSection");
       drinkRowsEl.innerHTML = "";
@@ -709,7 +668,6 @@
       }
       drinksSection.style.display = hasDrinks ? "block" : "none";
 
-      // Totals: service fee is 18% on top of (subtotal + tax)
       const subtotal = foodTotal + drinksTotal;
       const hst = subtotal * 0.13;
       const serviceFee = (subtotal + hst) * 0.18;
@@ -725,7 +683,6 @@
       document.getElementById("summaryBanner").textContent =
         `${foodQty} food items for ${total} people — estimated total: ${fmt(grandTotal)} CAD`;
 
-      // Store for email
       lastOrder = { lines, drinkLines, total, foodQty, subtotal, hst, serviceFee, grandTotal };
 
       resultsEl.style.display = "block";
@@ -740,7 +697,6 @@
       const isDelivery = document.getElementById("requestDelivery").checked;
       const deliveryAddr = document.getElementById("deliveryAddress").value;
 
-      // Format date nicely
       const dateObj = new Date(pickupDate + "T" + pickupTime);
       const dateStr = dateObj.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
       const timeStr = dateObj.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
@@ -748,7 +704,6 @@
         ? `Delivery on ${dateStr} at ${timeStr} to: ${deliveryAddr}`
         : `Pickup on ${dateStr} at ${timeStr}`;
 
-      // Build order summary
       let orderDetails = "";
       for (const line of lastOrder.lines) {
         orderDetails += `${line.qty}x ${line.name}\n`;
@@ -768,19 +723,39 @@
       window.location.href = mailtoUrl;
     }
 
-    // Set default pickup date to tomorrow
     function initDate() {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       document.getElementById("pickupDate").value = tomorrow.toISOString().split("T")[0];
     }
 
-    // Initialize
-    buildSubRows(document.getElementById("meatSubs"), MEAT_SUBS);
-    buildSubRows(document.getElementById("vegSubs"), VEG_SUBS);
-    buildDrinkRows(document.getElementById("drinksGrid"), DRINKS);
-    updateDefaults();
-    initDate();
+    async function loadMenu() {
+      try {
+        const res = await fetch("menu.json");
+        const menu = await res.json();
+
+        MEAT_RATIO = menu.ratios.meat;
+        VEG_RATIO = menu.ratios.vegetarian;
+        KALE_SHARE = menu.ratios.kaleShare;
+        IMPOSSIBLE_SHARE = menu.ratios.impossibleShare;
+
+        DEFAULTS = menu.defaults;
+        MEAT_SUBS = menu.meatSubs;
+        VEG_SUBS = menu.vegSubs;
+        DRINKS = menu.drinks;
+
+        buildSubRows(document.getElementById("meatSubs"), MEAT_SUBS);
+        buildSubRows(document.getElementById("vegSubs"), VEG_SUBS);
+        buildDrinkRows(document.getElementById("drinksGrid"), DRINKS);
+        updateDefaults();
+        initDate();
+      } catch (e) {
+        document.querySelector(".container").innerHTML =
+          '<p style="color:red;text-align:center;padding:2rem;">Failed to load menu data. Please refresh the page.</p>';
+      }
+    }
+
+    loadMenu();
   </script>
 </body>
 </html>
