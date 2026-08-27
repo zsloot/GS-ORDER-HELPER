@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gold Standard — Catering Order Form</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -16,20 +19,21 @@
       color: #1a1a1a;
       line-height: 1.5;
       padding: 1rem;
+      padding-bottom: 56px;
     }
 
     .container { max-width: 740px; margin: 0 auto; }
 
     header {
       text-align: center;
-      padding: 0.5rem 0 0;
+      padding: 0.15rem 0 0;
     }
 
     header img {
-      max-width: 420px;
+      max-width: 500px;
       width: 100%;
       height: auto;
-      margin-bottom: 0.15rem;
+      margin-bottom: 0;
     }
 
     header h1 {
@@ -149,8 +153,8 @@
     }
 
     .qty-btn {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       border: 1px solid #000;
       background: #fff;
       font-family: inherit;
@@ -171,8 +175,8 @@
     .qty-btn:active { background: #e0e0e0; }
 
     .qty-val {
-      width: 34px;
-      height: 30px;
+      width: 28px;
+      height: 26px;
       border: 1px solid #000;
       border-left: none;
       border-right: none;
@@ -284,23 +288,6 @@
       color: #555;
       white-space: nowrap;
     }
-
-    .remove-btn {
-      width: 28px;
-      height: 28px;
-      border: 1px solid #ccc;
-      background: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-family: inherit;
-      padding: 0;
-    }
-
-    .remove-btn:hover { border-color: #c0392b; color: #c0392b; }
 
     .add-btn {
       background: none;
@@ -469,10 +456,85 @@
       font-style: italic;
     }
 
+    /* ── Pin Total toggle ── */
+    .pin-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eee;
+    }
+
+    .pin-toggle-label {
+      font-size: 0.82rem;
+      color: #555;
+    }
+
+    .switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ccc;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+
+    .switch input:checked + .slider { background: #1a1a1a; }
+    .switch input:checked + .slider::before { transform: translateX(18px); }
+
+    /* ── Sticky footer ── */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      z-index: 50;
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .sticky-footer.hidden { transform: translateY(100%); }
+
+    .footer-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-stat { white-space: nowrap; }
+    .footer-total { font-weight: 700; font-size: 0.95rem; }
+
     /* ── Mobile ── */
     @media (max-width: 500px) {
       header h1 { font-size: 1.8rem; }
-      header img { max-width: 300px; }
+      header img { max-width: 340px; }
       .form-row { flex-direction: column; gap: 0.75rem; }
       .item-grid { grid-template-columns: 1fr auto; }
       .item-price, .grid-header-price { display: none; }
@@ -492,8 +554,6 @@
       Prices shown are estimates and may have changed since this page was published.
       This is a request only — no order will be placed without confirmation from our team.
       <br><br>
-      Order requests should be made with at least <strong>48 hours notice</strong>.
-      We'll do our best to get back to you within 24 hours.
       Unfortunately we aren't able to fulfil all catering requests, but we will do our best,
       and always appreciate the inquiry.
     </div>
@@ -516,6 +576,10 @@
         </div>
       </div>
       <p class="helper-text">Your suggested order will appear below.</p>
+      <div class="pin-toggle">
+        <label class="switch"><input type="checkbox" id="pinTotal"><span class="slider"></span></label>
+        <span class="pin-toggle-label">Pin Total — keep sandwich count fixed while swapping items</span>
+      </div>
     </div>
 
     <!-- Meat options -->
@@ -588,6 +652,7 @@
     </div>
 
     <button type="button" class="btn-request" id="requestBtn" onclick="requestOrder()">Request Order by Email</button>
+    <p class="download-link" id="shareBtn" onclick="shareOrder()">Share Order</p>
     <p class="download-link" id="downloadBtn" onclick="downloadOrder()">Download Order</p>
     <div id="errorMsg" class="error-msg"></div>
 
@@ -596,14 +661,54 @@
     </p>
   </div>
 
+  <div class="sticky-footer hidden" id="stickyFooter">
+    <div class="footer-stats">
+      <span class="footer-stat" id="footMeat">Meat: 0</span>
+      <span class="footer-stat" id="footVeg">Veg: 0</span>
+      <span class="footer-stat" id="footDrinks">Drinks: 0</span>
+      <span class="footer-stat" id="footItems">Items: 0</span>
+    </div>
+    <span class="footer-total" id="footTotal">$0.00</span>
+  </div>
+
   <script>
     let MEAT_RATIO, KALE_SHARE, IMPOSSIBLE_SHARE;
     let DEFAULTS, ALL_MEAT, ALL_VEG, DRINKS;
     let lastOrder = null;
+    let MEAT_IDS = [];
+    let VEG_IDS = [];
 
     function fmt(n) { return "$" + n.toFixed(2); }
     function getVal(id) { return parseInt(document.getElementById(id).value) || 0; }
     function getFloat(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+    function isFoodItem(id) {
+      return MEAT_IDS.indexOf(id) !== -1 || VEG_IDS.indexOf(id) !== -1;
+    }
+
+    function findPinTarget(sourceId, actualDelta) {
+      var candidates;
+      if (MEAT_IDS.indexOf(sourceId) !== -1) {
+        candidates = ["qty_def_meat"];
+        for (var i = 0; i < MEAT_IDS.length; i++) {
+          if (candidates.indexOf(MEAT_IDS[i]) === -1) candidates.push(MEAT_IDS[i]);
+        }
+      } else {
+        candidates = ["qty_def_kale", "qty_def_impossible", "qty_def_vegan"];
+        for (var i = 0; i < VEG_IDS.length; i++) {
+          if (candidates.indexOf(VEG_IDS[i]) === -1) candidates.push(VEG_IDS[i]);
+        }
+      }
+      for (var j = 0; j < candidates.length; j++) {
+        if (candidates[j] === sourceId) continue;
+        var el = document.getElementById(candidates[j]);
+        if (!el) continue;
+        var val = parseFloat(el.value) || 0;
+        if (actualDelta > 0 && val >= actualDelta) return candidates[j];
+        if (actualDelta < 0) return candidates[j];
+      }
+      return null;
+    }
 
     function changeQty(id, delta) {
       var el = document.getElementById(id);
@@ -611,6 +716,19 @@
       var min = parseFloat(el.min) || 0;
       var current = parseFloat(el.value) || 0;
       var newVal = Math.max(min, current + delta * step);
+      var rounded = step < 1 ? newVal : Math.round(newVal);
+      var actualDelta = rounded - current;
+
+      if (document.getElementById("pinTotal").checked && isFoodItem(id) && actualDelta !== 0) {
+        var targetId = findPinTarget(id, actualDelta);
+        if (!targetId) return;
+        var targetEl = document.getElementById(targetId);
+        var targetCurrent = parseFloat(targetEl.value) || 0;
+        var targetNew = Math.round(targetCurrent - actualDelta);
+        if (targetNew < 0) return;
+        targetEl.value = targetNew;
+      }
+
       el.value = step < 1 ? newVal.toFixed(1) : Math.round(newVal);
       el.dispatchEvent(new Event("input", { bubbles: true }));
     }
@@ -716,17 +834,21 @@
       row.innerHTML = '<input type="text" class="dietary-name" placeholder="e.g., Nut allergy, Gluten-free">'
         + '<div class="qty-stepper">'
         + '<button type="button" class="qty-btn" onclick="changeDietQty(this,-1)">−</button>'
-        + '<input type="number" class="qty-val diet-count-input" value="1" min="1">'
+        + '<input type="number" class="qty-val diet-count-input" value="1" min="0" oninput="checkDietZero(this)">'
         + '<button type="button" class="qty-btn" onclick="changeDietQty(this,1)">+</button>'
-        + '</div>'
-        + '<button type="button" class="remove-btn" onclick="this.closest(\'.dietary-row\').remove()">×</button>';
+        + '</div>';
       list.appendChild(row);
     }
 
     function changeDietQty(btn, delta) {
       var input = btn.closest(".qty-stepper").querySelector("input");
-      var val = Math.max(1, (parseInt(input.value) || 1) + delta);
+      var val = Math.max(0, (parseInt(input.value) || 1) + delta);
+      if (val <= 0) { btn.closest(".dietary-row").remove(); return; }
       input.value = val;
+    }
+
+    function checkDietZero(input) {
+      if (parseInt(input.value) === 0) input.closest(".dietary-row").remove();
     }
 
     function getDietaryRestrictions() {
@@ -765,6 +887,7 @@
       if (lines.length === 0 && drinkLines.length === 0) {
         container.innerHTML = '<p class="order-empty">Adjust quantities above to build your order.</p>';
         lastOrder = null;
+        updateFooter();
         return;
       }
 
@@ -824,6 +947,7 @@
         total: getVal("groupSize"),
         subtotal: subtotal, hst: hst, serviceFee: serviceFee, grandTotal: grandTotal
       };
+      updateFooter();
     }
 
     function buildOrderText() {
@@ -888,14 +1012,14 @@
       window.location.href = mailtoUrl;
     }
 
-    function downloadOrder() {
+    function shareOrder() {
       if (!lastOrder || lastOrder.totalItems === 0) {
         document.getElementById("errorMsg").textContent = "Add at least one item to your order.";
         return;
       }
 
       var text = buildOrderText();
-      var btn = document.getElementById("downloadBtn");
+      var btn = document.getElementById("shareBtn");
 
       if (navigator.share) {
         navigator.share({ title: "Gold Standard Catering Order", text: text }).catch(function() {});
@@ -904,11 +1028,60 @@
 
       navigator.clipboard.writeText(text).then(function() {
         btn.textContent = "Copied to clipboard!";
-        setTimeout(function() { btn.textContent = "Download Order"; }, 2500);
+        setTimeout(function() { btn.textContent = "Share Order"; }, 2500);
       }).catch(function() {
         var w = window.open("", "_blank");
         w.document.write("<pre style='white-space:pre-wrap;font-family:monospace;padding:1rem;'>" + text.replace(/</g, "&lt;") + "</pre>");
       });
+    }
+
+    function downloadOrder() {
+      if (!lastOrder || lastOrder.totalItems === 0) {
+        document.getElementById("errorMsg").textContent = "Add at least one item to your order.";
+        return;
+      }
+
+      var text = buildOrderText();
+      var pickupDate = document.getElementById("pickupDate").value || "order";
+      var filename = "gold-standard-catering-request-" + pickupDate + ".txt";
+      var blob = new Blob([text], { type: "text/plain" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      var btn = document.getElementById("downloadBtn");
+      btn.textContent = "Downloaded!";
+      setTimeout(function() { btn.textContent = "Download Order"; }, 2500);
+    }
+
+    function updateFooter() {
+      if (!MEAT_IDS.length) return;
+      var meatCount = 0, vegCount = 0, drinkCount = 0;
+      MEAT_IDS.forEach(function(id) { meatCount += getVal(id); });
+      VEG_IDS.forEach(function(id) { vegCount += getVal(id); });
+      if (DRINKS) DRINKS.forEach(function(dk) { drinkCount += getVal("drink_" + dk.id); });
+      var totalItems = meatCount + vegCount + drinkCount;
+      document.getElementById("footMeat").textContent = "Meat: " + meatCount;
+      document.getElementById("footVeg").textContent = "Veg: " + vegCount;
+      document.getElementById("footDrinks").textContent = "Drinks: " + drinkCount;
+      document.getElementById("footItems").textContent = "Items: " + totalItems;
+      document.getElementById("footTotal").textContent = lastOrder ? fmt(lastOrder.grandTotal) : "$0.00";
+    }
+
+    function setupFooterObserver() {
+      var orderCard = document.getElementById("suggestedOrder").closest(".card");
+      var footer = document.getElementById("stickyFooter");
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          footer.classList.toggle("hidden", entry.isIntersecting);
+        });
+      }, { threshold: 0.1 });
+      observer.observe(orderCard);
     }
 
     function initDate() {
@@ -939,11 +1112,15 @@
 
         DRINKS = menu.drinks;
 
+        MEAT_IDS = ALL_MEAT.map(function(item) { return "qty_" + item.id; });
+        VEG_IDS = ALL_VEG.map(function(item) { return "qty_" + item.id; });
+
         buildItemRows(document.getElementById("meatOptions"), ALL_MEAT);
         buildItemRows(document.getElementById("vegOptions"), ALL_VEG);
         buildDrinkRows(document.getElementById("drinksGrid"), DRINKS);
         recalcDefaults();
         initDate();
+        setupFooterObserver();
       } catch (e) {
         document.querySelector(".container").innerHTML =
           '<p style="color:red;text-align:center;padding:2rem;">Failed to load menu data. Please refresh the page.</p>';
