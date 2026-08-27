@@ -865,24 +865,27 @@
       var list = document.getElementById("dietaryList");
       var row = document.createElement("div");
       row.className = "dietary-row";
-      row.innerHTML = '<input type="text" class="dietary-name" placeholder="e.g., Nut allergy, Gluten-free">'
+      row.innerHTML = '<input type="text" class="dietary-name" placeholder="e.g., Nut allergy, Gluten-free" oninput="updateSuggestedOrder()">'
         + '<div class="qty-stepper">'
         + '<button type="button" class="qty-btn" onclick="changeDietQty(this,-1)">−</button>'
         + '<input type="number" class="qty-val diet-count-input" value="1" min="0" oninput="checkDietZero(this)">'
         + '<button type="button" class="qty-btn" onclick="changeDietQty(this,1)">+</button>'
         + '</div>';
       list.appendChild(row);
+      updateSuggestedOrder();
     }
 
     function changeDietQty(btn, delta) {
       var input = btn.closest(".qty-stepper").querySelector("input");
       var val = Math.max(0, (parseInt(input.value) || 1) + delta);
-      if (val <= 0) { btn.closest(".dietary-row").remove(); return; }
+      if (val <= 0) { btn.closest(".dietary-row").remove(); updateSuggestedOrder(); return; }
       input.value = val;
+      updateSuggestedOrder();
     }
 
     function checkDietZero(input) {
-      if (parseInt(input.value) === 0) input.closest(".dietary-row").remove();
+      if (parseInt(input.value) === 0) { input.closest(".dietary-row").remove(); updateSuggestedOrder(); return; }
+      updateSuggestedOrder();
     }
 
     function getDietaryRestrictions() {
