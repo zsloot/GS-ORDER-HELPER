@@ -629,7 +629,7 @@
       <p class="helper-text">Your suggested order will appear below.</p>
       <div class="pin-toggle">
         <label class="switch"><input type="checkbox" id="pinTotal"><span class="slider"></span></label>
-        <span class="pin-toggle-label">Pin Total — keep sandwich count fixed while swapping items</span>
+        <span class="pin-toggle-label">Pin Total — <em>keep sandwich count fixed while swapping items</em></span>
       </div>
     </div>
 
@@ -710,10 +710,6 @@
       <span class="download-link" id="downloadBtn" onclick="downloadOrder()">Download Order</span>
     </p>
     <div id="errorMsg" class="error-msg"></div>
-
-    <p class="note" style="margin-top:1rem;">
-      All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.
-    </p>
 
     <div class="three-stars">
       <span class="star star-black">★</span>
@@ -1002,6 +998,7 @@
       }
 
       html += '<div class="total-items"><strong>Total Items: ' + totalItems + '</strong></div>';
+      html += '<p class="note" style="margin-top:0.75rem;">All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.</p>';
 
       container.innerHTML = html;
 
