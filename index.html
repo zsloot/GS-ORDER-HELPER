@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GS Catering Order Helper</title>
+  <style>
+    :root {
+      --color-bg: #faf9f6;
+      --color-surface: #ffffff;
+      --color-text: #1a1a1a;
+      --color-text-secondary: #555;
+      --color-accent: #2d6a4f;
+      --color-accent-light: #d8f3dc;
+      --color-border: #ddd;
+      --color-error: #c0392b;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.5;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 0 1.5rem;
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    header p {
+      color: var(--color-text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--color-accent);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 500px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    input[type="number"], select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+      background: var(--color-bg);
+    }
+
+    input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 2px var(--color-accent-light);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      accent-color: var(--color-accent);
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: #235a3f; }
+
+    .error-msg {
+      color: var(--color-error);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    #results {
+      display: none;
+    }
+
+    .order-section {
+      margin-bottom: 1rem;
+    }
+
+    .order-section h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-table th,
+    .order-table td {
+      text-align: left;
+      padding: 0.5rem 0.5rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+
+    .order-table th {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .order-table td:nth-child(2),
+    .order-table th:nth-child(2) {
+      text-align: center;
+    }
+
+    .order-table td:last-child,
+    .order-table th:last-child {
+      text-align: right;
+    }
+
+    .order-table .diet-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      margin-left: 0.35rem;
+      vertical-align: middle;
+    }
+
+    .tag-v { background: #d8f3dc; color: #2d6a4f; }
+    .tag-vg { background: #fde2c8; color: #b35e1c; }
+    .tag-gf { background: #e8daef; color: #6c3483; }
+    .tag-df { background: #d6eaf8; color: #21618c; }
+    .tag-nf { background: #fdebd0; color: #935116; }
+
+    .totals-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    .totals-table td {
+      padding: 0.35rem 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .totals-table td:last-child {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .totals-table .total-row td {
+      font-weight: 700;
+      font-size: 1.05rem;
+      border-top: 2px solid var(--color-accent);
+      padding-top: 0.5rem;
+      color: var(--color-accent);
+    }
+
+    .note {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.75rem;
+      font-style: italic;
+    }
+
+    .summary-banner {
+      background: var(--color-accent-light);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>GS Catering Order Helper</h1>
+      <p>Plan your sandwich catering order in seconds</p>
+    </header>
+
+    <div class="card">
+      <h2>Group Details</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label for="totalPeople">Total People</label>
+          <input type="number" id="totalPeople" min="1" max="500" value="10">
+        </div>
+        <div class="field">
+          <label for="sandwichesPerPerson">Sandwiches per Person</label>
+          <select id="sandwichesPerPerson">
+            <option value="1">1 (light lunch)</option>
+            <option value="1.5" selected>1.5 (recommended)</option>
+            <option value="2">2 (hearty lunch)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="vegetarians">Vegetarians</label>
+          <input type="number" id="vegetarians" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="vegans">Vegans</label>
+          <input type="number" id="vegans" min="0" value="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Other Dietary Needs</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label for="glutenFree">Gluten-Free</label>
+          <input type="number" id="glutenFree" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="dairyFree">Dairy-Free</label>
+          <input type="number" id="dairyFree" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="nutFree">Nut-Free</label>
+          <input type="number" id="nutFree" min="0" value="0">
+        </div>
+      </div>
+      <p class="note" style="margin-top: 0.75rem;">
+        People can belong to multiple groups (e.g., a vegan who is also gluten-free).
+        The calculator accounts for overlaps.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Options</h2>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="addDrinks"> Add drinks ($2.50/person)</label>
+        <label><input type="checkbox" id="addChips"> Add chips ($1.50/person)</label>
+        <label><input type="checkbox" id="addCookies"> Add cookies ($2.00/person)</label>
+      </div>
+    </div>
+
+    <button class="btn" onclick="generateOrder()">Generate Order Suggestion</button>
+    <div id="errorMsg" class="error-msg"></div>
+
+    <div id="results">
+      <div class="card">
+        <h2>Suggested Order</h2>
+        <div id="summaryBanner" class="summary-banner"></div>
+
+        <div class="order-section">
+          <h3>Sandwiches</h3>
+          <div style="overflow-x: auto;">
+            <table class="order-table">
+              <thead>
+                <tr><th>Sandwich</th><th>Qty</th><th>Price</th></tr>
+              </thead>
+              <tbody id="sandwichRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="extrasSection" class="order-section" style="display:none;">
+          <h3>Extras</h3>
+          <div style="overflow-x: auto;">
+            <table class="order-table">
+              <thead>
+                <tr><th>Item</th><th>Qty</th><th>Price</th></tr>
+              </thead>
+              <tbody id="extrasRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="order-section">
+          <h3>Pricing</h3>
+          <table class="totals-table">
+            <tbody id="totalsRows"></tbody>
+          </table>
+        </div>
+
+        <p class="note">
+          Prices are estimates and may vary. Contact us to finalize your order.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MENU = {
+      regular: [
+        { name: "Turkey Club", price: 10.50, tags: [] },
+        { name: "Italian Sub", price: 11.00, tags: [] },
+        { name: "Roast Beef & Cheddar", price: 11.50, tags: [] },
+        { name: "Chicken Pesto", price: 10.50, tags: [] },
+        { name: "Ham & Swiss", price: 10.00, tags: [] },
+        { name: "BLT", price: 9.50, tags: [] },
+      ],
+      vegetarian: [
+        { name: "Caprese", price: 9.50, tags: ["v"] },
+        { name: "Garden Veggie", price: 9.00, tags: ["v"] },
+        { name: "Grilled Cheese & Tomato", price: 8.50, tags: ["v"] },
+      ],
+      vegan: [
+        { name: "Hummus & Roasted Veggie Wrap", price: 9.50, tags: ["vg", "df"] },
+        { name: "BBQ Jackfruit", price: 10.00, tags: ["vg", "df"] },
+        { name: "Mediterranean Falafel", price: 10.00, tags: ["vg", "df"] },
+      ],
+      glutenFree: [
+        { name: "Turkey Lettuce Wrap", price: 10.50, tags: ["gf"] },
+        { name: "Caprese Lettuce Wrap", price: 9.50, tags: ["gf", "v"] },
+      ],
+      veganGlutenFree: [
+        { name: "Hummus Collard Wrap", price: 10.00, tags: ["vg", "gf", "df"] },
+      ],
+    };
+
+    const TAG_LABELS = {
+      v: "V",
+      vg: "VG",
+      gf: "GF",
+      df: "DF",
+      nf: "NF",
+    };
+
+    const TAG_CLASSES = {
+      v: "tag-v",
+      vg: "tag-vg",
+      gf: "tag-gf",
+      df: "tag-df",
+      nf: "tag-nf",
+    };
+
+    function fmt(n) {
+      return "$" + n.toFixed(2);
+    }
+
+    function tagHTML(tags) {
+      return tags
+        .map((t) => `<span class="diet-tag ${TAG_CLASSES[t]}">${TAG_LABELS[t]}</span>`)
+        .join("");
+    }
+
+    function distribute(count, items) {
+      if (count <= 0 || items.length === 0) return [];
+      const result = [];
+      const base = Math.floor(count / items.length);
+      let remainder = count - base * items.length;
+      for (const item of items) {
+        const qty = base + (remainder > 0 ? 1 : 0);
+        if (remainder > 0) remainder--;
+        if (qty > 0) {
+          result.push({ ...item, qty });
+        }
+      }
+      return result;
+    }
+
+    function generateOrder() {
+      const errorEl = document.getElementById("errorMsg");
+      const resultsEl = document.getElementById("results");
+      errorEl.textContent = "";
+      resultsEl.style.display = "none";
+
+      const total = parseInt(document.getElementById("totalPeople").value) || 0;
+      const ratio = parseFloat(document.getElementById("sandwichesPerPerson").value);
+      const vegCount = parseInt(document.getElementById("vegetarians").value) || 0;
+      const veganCount = parseInt(document.getElementById("vegans").value) || 0;
+      const gfCount = parseInt(document.getElementById("glutenFree").value) || 0;
+      const dfCount = parseInt(document.getElementById("dairyFree").value) || 0;
+      const nfCount = parseInt(document.getElementById("nutFree").value) || 0;
+      const addDrinks = document.getElementById("addDrinks").checked;
+      const addChips = document.getElementById("addChips").checked;
+      const addCookies = document.getElementById("addCookies").checked;
+
+      if (total < 1) {
+        errorEl.textContent = "Please enter at least 1 person.";
+        return;
+      }
+
+      const specialCount = vegCount + veganCount + gfCount;
+      if (specialCount > total) {
+        errorEl.textContent =
+          "Dietary group totals can exceed the headcount (people can belong to multiple groups), but please double-check your numbers.";
+      }
+
+      const totalSandwiches = Math.ceil(total * ratio);
+
+      const veganGfSandwiches = Math.ceil(
+        Math.min(veganCount, gfCount) > 0 ? Math.min(veganCount, gfCount) * ratio : 0
+      );
+      const veganOnlySandwiches = Math.ceil(
+        Math.max(0, veganCount - (veganGfSandwiches > 0 ? Math.min(veganCount, gfCount) : 0)) * ratio
+      );
+      const gfOnlySandwiches = Math.ceil(
+        Math.max(0, gfCount - (veganGfSandwiches > 0 ? Math.min(veganCount, gfCount) : 0)) * ratio
+      );
+      const vegOnlySandwiches = Math.ceil(
+        Math.max(0, vegCount) * ratio
+      );
+      const regularSandwiches = Math.max(
+        0,
+        totalSandwiches - veganOnlySandwiches - veganGfSandwiches - gfOnlySandwiches - vegOnlySandwiches
+      );
+
+      const orderLines = [];
+
+      if (regularSandwiches > 0) {
+        orderLines.push(...distribute(regularSandwiches, MENU.regular));
+      }
+      if (vegOnlySandwiches > 0) {
+        orderLines.push(...distribute(vegOnlySandwiches, MENU.vegetarian));
+      }
+      if (veganOnlySandwiches > 0) {
+        orderLines.push(...distribute(veganOnlySandwiches, MENU.vegan));
+      }
+      if (gfOnlySandwiches > 0) {
+        orderLines.push(...distribute(gfOnlySandwiches, MENU.glutenFree));
+      }
+      if (veganGfSandwiches > 0) {
+        orderLines.push(...distribute(veganGfSandwiches, MENU.veganGlutenFree));
+      }
+
+      const sandwichRows = document.getElementById("sandwichRows");
+      sandwichRows.innerHTML = "";
+      let sandwichSubtotal = 0;
+
+      for (const line of orderLines) {
+        const lineTotal = line.qty * line.price;
+        sandwichSubtotal += lineTotal;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${line.name}${tagHTML(line.tags)}</td>
+          <td>${line.qty}</td>
+          <td>${fmt(lineTotal)}</td>
+        `;
+        sandwichRows.appendChild(tr);
+      }
+
+      const extrasRows = document.getElementById("extrasRows");
+      const extrasSection = document.getElementById("extrasSection");
+      extrasRows.innerHTML = "";
+      let extrasSubtotal = 0;
+      const extras = [];
+
+      if (addDrinks) extras.push({ name: "Assorted Drinks", qty: total, price: 2.50 });
+      if (addChips) extras.push({ name: "Chips", qty: total, price: 1.50 });
+      if (addCookies) extras.push({ name: "Cookies", qty: total, price: 2.00 });
+
+      if (extras.length > 0) {
+        extrasSection.style.display = "block";
+        for (const item of extras) {
+          const lineTotal = item.qty * item.price;
+          extrasSubtotal += lineTotal;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>${fmt(lineTotal)}</td>
+          `;
+          extrasRows.appendChild(tr);
+        }
+      } else {
+        extrasSection.style.display = "none";
+      }
+
+      const subtotal = sandwichSubtotal + extrasSubtotal;
+      const serviceFee = subtotal * 0.15;
+      const tax = subtotal * 0.08;
+      const grandTotal = subtotal + serviceFee + tax;
+
+      const totalsRows = document.getElementById("totalsRows");
+      totalsRows.innerHTML = `
+        <tr><td>Subtotal</td><td>${fmt(subtotal)}</td></tr>
+        <tr><td>Service Fee (15%)</td><td>${fmt(serviceFee)}</td></tr>
+        <tr><td>Estimated Tax (8%)</td><td>${fmt(tax)}</td></tr>
+        <tr class="total-row"><td>Estimated Total</td><td>${fmt(grandTotal)}</td></tr>
+      `;
+
+      const totalSandwichQty = orderLines.reduce((s, l) => s + l.qty, 0);
+      document.getElementById("summaryBanner").textContent =
+        `${totalSandwichQty} sandwiches for ${total} people — estimated total: ${fmt(grandTotal)}`;
+
+      resultsEl.style.display = "block";
+      resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  </script>
+</body>
+</html>
