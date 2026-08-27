@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GS Catering Order Helper</title>
+  <title>Gold Standard — Catering Order Helper</title>
   <style>
     :root {
       --color-bg: #faf9f6;
@@ -107,7 +107,7 @@
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
 
     .checkbox-group label {
@@ -209,9 +209,13 @@
 
     .tag-v { background: #d8f3dc; color: #2d6a4f; }
     .tag-vg { background: #fde2c8; color: #b35e1c; }
-    .tag-gf { background: #e8daef; color: #6c3483; }
-    .tag-df { background: #d6eaf8; color: #21618c; }
-    .tag-nf { background: #fdebd0; color: #935116; }
+
+    .item-desc {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.15rem;
+    }
 
     .totals-table {
       width: 100%;
@@ -258,8 +262,8 @@
 <body>
   <div class="container">
     <header>
-      <h1>GS Catering Order Helper</h1>
-      <p>Plan your sandwich catering order in seconds</p>
+      <h1>Gold Standard — Catering Order Helper</h1>
+      <p>Plan your catering order in seconds</p>
     </header>
 
     <div class="card">
@@ -272,9 +276,9 @@
         <div class="field">
           <label for="sandwichesPerPerson">Sandwiches per Person</label>
           <select id="sandwichesPerPerson">
-            <option value="1">1 (light lunch)</option>
+            <option value="1">1 (light)</option>
             <option value="1.5" selected>1.5 (recommended)</option>
-            <option value="2">2 (hearty lunch)</option>
+            <option value="2">2 (hearty)</option>
           </select>
         </div>
         <div class="field">
@@ -289,33 +293,12 @@
     </div>
 
     <div class="card">
-      <h2>Other Dietary Needs</h2>
-      <div class="form-grid">
-        <div class="field">
-          <label for="glutenFree">Gluten-Free</label>
-          <input type="number" id="glutenFree" min="0" value="0">
-        </div>
-        <div class="field">
-          <label for="dairyFree">Dairy-Free</label>
-          <input type="number" id="dairyFree" min="0" value="0">
-        </div>
-        <div class="field">
-          <label for="nutFree">Nut-Free</label>
-          <input type="number" id="nutFree" min="0" value="0">
-        </div>
-      </div>
-      <p class="note" style="margin-top: 0.75rem;">
-        People can belong to multiple groups (e.g., a vegan who is also gluten-free).
-        The calculator accounts for overlaps.
-      </p>
-    </div>
-
-    <div class="card">
-      <h2>Options</h2>
+      <h2>Add Drinks</h2>
       <div class="checkbox-group">
-        <label><input type="checkbox" id="addDrinks"> Add drinks ($2.50/person)</label>
-        <label><input type="checkbox" id="addChips"> Add chips ($1.50/person)</label>
-        <label><input type="checkbox" id="addCookies"> Add cookies ($2.00/person)</label>
+        <label><input type="checkbox" id="addDrinksCoffee"> Coffee ($2.50/ea)</label>
+        <label><input type="checkbox" id="addDrinksJuice"> Juice ($6.50/ea)</label>
+        <label><input type="checkbox" id="addDrinksWater"> Water ($3.50/ea)</label>
+        <label><input type="checkbox" id="addDrinksSoda"> Soda ($4.00/ea)</label>
       </div>
     </div>
 
@@ -328,25 +311,25 @@
         <div id="summaryBanner" class="summary-banner"></div>
 
         <div class="order-section">
-          <h3>Sandwiches</h3>
+          <h3>Food</h3>
           <div style="overflow-x: auto;">
             <table class="order-table">
               <thead>
-                <tr><th>Sandwich</th><th>Qty</th><th>Price</th></tr>
+                <tr><th>Item</th><th>Qty</th><th>Price</th></tr>
               </thead>
               <tbody id="sandwichRows"></tbody>
             </table>
           </div>
         </div>
 
-        <div id="extrasSection" class="order-section" style="display:none;">
-          <h3>Extras</h3>
+        <div id="drinksSection" class="order-section" style="display:none;">
+          <h3>Drinks</h3>
           <div style="overflow-x: auto;">
             <table class="order-table">
               <thead>
                 <tr><th>Item</th><th>Qty</th><th>Price</th></tr>
               </thead>
-              <tbody id="extrasRows"></tbody>
+              <tbody id="drinksRows"></tbody>
             </table>
           </div>
         </div>
@@ -359,56 +342,118 @@
         </div>
 
         <p class="note">
-          Prices are estimates and may vary. Contact us to finalize your order.
+          All prices in CAD. Prices are estimates based on current menu and may vary.
+          Contact us to finalize your catering order.
         </p>
       </div>
     </div>
   </div>
 
   <script>
+    // ──────────────────────────────────────────────
+    // Gold Standard menu data
+    // Source: https://goldstandardsandwich.square.site
+    // ──────────────────────────────────────────────
+
     const MENU = {
+      // Meat / regular items
       regular: [
-        { name: "Turkey Club", price: 10.50, tags: [] },
-        { name: "Italian Sub", price: 11.00, tags: [] },
-        { name: "Roast Beef & Cheddar", price: 11.50, tags: [] },
-        { name: "Chicken Pesto", price: 10.50, tags: [] },
-        { name: "Ham & Swiss", price: 10.00, tags: [] },
-        { name: "BLT", price: 9.50, tags: [] },
+        {
+          name: "Gold Standard Sandwich (Bacon)",
+          desc: "Bacon, cheesy eggs, aioli, pickles, Marie Sharp's hot sauce, English muffin",
+          price: 9.50,
+          tags: [],
+        },
+        {
+          name: "Gold Standard Sandwich (Bacon & Kale)",
+          desc: "Bacon, kale, cheesy eggs, aioli, pickles, Marie Sharp's hot sauce, English muffin",
+          price: 10.75,
+          tags: [],
+        },
+        {
+          name: "Bulldog Butty",
+          desc: "Bacon, Bulldog sauce, Kewpie mayo, onion, hot sauce",
+          price: 11.00,
+          tags: [],
+          note: "Queen St. exclusive",
+        },
+        {
+          name: "Telway Burger",
+          desc: "Detroit-style all-beef patty, mustard, pickles, onion, American cheese, Martin's potato roll",
+          price: 9.50,
+          tags: [],
+        },
+        {
+          name: "Four Guys Burger",
+          desc: "Beef patty, special sauce, lettuce, cheese, pickles, caramelized onion, Martin's potato roll",
+          price: 13.00,
+          tags: [],
+        },
+        {
+          name: "Breakfast Burrito",
+          desc: "Beef, cheesy eggs, avocado crema, chips, chipotle salsa, jalapeño, tortilla",
+          price: 15.00,
+          tags: [],
+          note: "Queen St. exclusive",
+        },
+        {
+          name: "Chicken Caesar Wrap",
+          desc: "Fried chicken, bacon, aged Gouda, lemon-Maggi Caesar dressing, romaine, hickory sticks",
+          price: 14.00,
+          tags: [],
+          note: "Harbourfront exclusive",
+        },
       ],
+
+      // Vegetarian items (has eggs/dairy, no meat)
       vegetarian: [
-        { name: "Caprese", price: 9.50, tags: ["v"] },
-        { name: "Garden Veggie", price: 9.00, tags: ["v"] },
-        { name: "Grilled Cheese & Tomato", price: 8.50, tags: ["v"] },
+        {
+          name: "Gold Standard Sandwich (Kale)",
+          desc: "Kale, cheesy eggs, aioli, pickles, Marie Sharp's hot sauce, English muffin",
+          price: 9.50,
+          tags: ["v"],
+        },
+        {
+          name: "Gold Standard Sandwich (Impossible)",
+          desc: "Impossible sausage, cheesy eggs, aioli, pickles, Marie Sharp's hot sauce, English muffin",
+          price: 10.50,
+          tags: ["v"],
+        },
+        {
+          name: "Impossible Melt",
+          desc: "Impossible patty, American cheese, pickles, mustard, caramelized onion, special sauce, Martin's potato roll",
+          price: 12.00,
+          tags: ["v"],
+        },
+        {
+          name: "Breakfast Burrito (Impossible)",
+          desc: "Impossible, cheesy eggs, avocado crema, chips, chipotle salsa, jalapeño, tortilla",
+          price: 17.00,
+          tags: ["v"],
+          note: "Queen St. exclusive",
+        },
       ],
+
+      // Vegan items
       vegan: [
-        { name: "Hummus & Roasted Veggie Wrap", price: 9.50, tags: ["vg", "df"] },
-        { name: "BBQ Jackfruit", price: 10.00, tags: ["vg", "df"] },
-        { name: "Mediterranean Falafel", price: 10.00, tags: ["vg", "df"] },
-      ],
-      glutenFree: [
-        { name: "Turkey Lettuce Wrap", price: 10.50, tags: ["gf"] },
-        { name: "Caprese Lettuce Wrap", price: 9.50, tags: ["gf", "v"] },
-      ],
-      veganGlutenFree: [
-        { name: "Hummus Collard Wrap", price: 10.00, tags: ["vg", "gf", "df"] },
+        {
+          name: "The Alternative",
+          desc: "Vegan hummus, mustard, sprouts, mushrooms, chimichurri, pickles, pickled red onion, English muffin",
+          price: 9.50,
+          tags: ["vg"],
+        },
       ],
     };
 
-    const TAG_LABELS = {
-      v: "V",
-      vg: "VG",
-      gf: "GF",
-      df: "DF",
-      nf: "NF",
+    const DRINKS = {
+      coffee:  { name: "Coffee (Medium)", price: 2.50 },
+      juice:   { name: "Juice", price: 6.50 },
+      water:   { name: "Water (Flow 500mL)", price: 3.50 },
+      soda:    { name: "Mexican Coca-Cola / Mate Libre", price: 4.00 },
     };
 
-    const TAG_CLASSES = {
-      v: "tag-v",
-      vg: "tag-vg",
-      gf: "tag-gf",
-      df: "tag-df",
-      nf: "tag-nf",
-    };
+    const TAG_LABELS = { v: "V", vg: "VG" };
+    const TAG_CLASSES = { v: "tag-v", vg: "tag-vg" };
 
     function fmt(n) {
       return "$" + n.toFixed(2);
@@ -445,120 +490,105 @@
       const ratio = parseFloat(document.getElementById("sandwichesPerPerson").value);
       const vegCount = parseInt(document.getElementById("vegetarians").value) || 0;
       const veganCount = parseInt(document.getElementById("vegans").value) || 0;
-      const gfCount = parseInt(document.getElementById("glutenFree").value) || 0;
-      const dfCount = parseInt(document.getElementById("dairyFree").value) || 0;
-      const nfCount = parseInt(document.getElementById("nutFree").value) || 0;
-      const addDrinks = document.getElementById("addDrinks").checked;
-      const addChips = document.getElementById("addChips").checked;
-      const addCookies = document.getElementById("addCookies").checked;
+
+      const addCoffee = document.getElementById("addDrinksCoffee").checked;
+      const addJuice = document.getElementById("addDrinksJuice").checked;
+      const addWater = document.getElementById("addDrinksWater").checked;
+      const addSoda = document.getElementById("addDrinksSoda").checked;
 
       if (total < 1) {
         errorEl.textContent = "Please enter at least 1 person.";
         return;
       }
 
-      const specialCount = vegCount + veganCount + gfCount;
-      if (specialCount > total) {
+      if (vegCount + veganCount > total) {
         errorEl.textContent =
-          "Dietary group totals can exceed the headcount (people can belong to multiple groups), but please double-check your numbers.";
+          "Vegetarian + vegan count exceeds total people. Please double-check your numbers.";
+        return;
       }
 
       const totalSandwiches = Math.ceil(total * ratio);
 
-      const veganGfSandwiches = Math.ceil(
-        Math.min(veganCount, gfCount) > 0 ? Math.min(veganCount, gfCount) * ratio : 0
-      );
-      const veganOnlySandwiches = Math.ceil(
-        Math.max(0, veganCount - (veganGfSandwiches > 0 ? Math.min(veganCount, gfCount) : 0)) * ratio
-      );
-      const gfOnlySandwiches = Math.ceil(
-        Math.max(0, gfCount - (veganGfSandwiches > 0 ? Math.min(veganCount, gfCount) : 0)) * ratio
-      );
-      const vegOnlySandwiches = Math.ceil(
-        Math.max(0, vegCount) * ratio
-      );
-      const regularSandwiches = Math.max(
-        0,
-        totalSandwiches - veganOnlySandwiches - veganGfSandwiches - gfOnlySandwiches - vegOnlySandwiches
-      );
+      const veganSandwiches = Math.ceil(veganCount * ratio);
+      const vegSandwiches = Math.ceil(vegCount * ratio);
+      const regularSandwiches = Math.max(0, totalSandwiches - veganSandwiches - vegSandwiches);
 
       const orderLines = [];
 
       if (regularSandwiches > 0) {
         orderLines.push(...distribute(regularSandwiches, MENU.regular));
       }
-      if (vegOnlySandwiches > 0) {
-        orderLines.push(...distribute(vegOnlySandwiches, MENU.vegetarian));
+      if (vegSandwiches > 0) {
+        orderLines.push(...distribute(vegSandwiches, MENU.vegetarian));
       }
-      if (veganOnlySandwiches > 0) {
-        orderLines.push(...distribute(veganOnlySandwiches, MENU.vegan));
-      }
-      if (gfOnlySandwiches > 0) {
-        orderLines.push(...distribute(gfOnlySandwiches, MENU.glutenFree));
-      }
-      if (veganGfSandwiches > 0) {
-        orderLines.push(...distribute(veganGfSandwiches, MENU.veganGlutenFree));
+      if (veganSandwiches > 0) {
+        orderLines.push(...distribute(veganSandwiches, MENU.vegan));
       }
 
       const sandwichRows = document.getElementById("sandwichRows");
       sandwichRows.innerHTML = "";
-      let sandwichSubtotal = 0;
+      let foodSubtotal = 0;
 
       for (const line of orderLines) {
         const lineTotal = line.qty * line.price;
-        sandwichSubtotal += lineTotal;
+        foodSubtotal += lineTotal;
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${line.name}${tagHTML(line.tags)}</td>
+          <td>
+            ${line.name}${tagHTML(line.tags)}
+            <span class="item-desc">${line.desc}</span>
+          </td>
           <td>${line.qty}</td>
           <td>${fmt(lineTotal)}</td>
         `;
         sandwichRows.appendChild(tr);
       }
 
-      const extrasRows = document.getElementById("extrasRows");
-      const extrasSection = document.getElementById("extrasSection");
-      extrasRows.innerHTML = "";
-      let extrasSubtotal = 0;
-      const extras = [];
+      // Drinks
+      const drinksRows = document.getElementById("drinksRows");
+      const drinksSection = document.getElementById("drinksSection");
+      drinksRows.innerHTML = "";
+      let drinksSubtotal = 0;
+      const drinkLines = [];
 
-      if (addDrinks) extras.push({ name: "Assorted Drinks", qty: total, price: 2.50 });
-      if (addChips) extras.push({ name: "Chips", qty: total, price: 1.50 });
-      if (addCookies) extras.push({ name: "Cookies", qty: total, price: 2.00 });
+      if (addCoffee) drinkLines.push({ ...DRINKS.coffee, qty: total });
+      if (addJuice) drinkLines.push({ ...DRINKS.juice, qty: total });
+      if (addWater) drinkLines.push({ ...DRINKS.water, qty: total });
+      if (addSoda) drinkLines.push({ ...DRINKS.soda, qty: total });
 
-      if (extras.length > 0) {
-        extrasSection.style.display = "block";
-        for (const item of extras) {
+      if (drinkLines.length > 0) {
+        drinksSection.style.display = "block";
+        for (const item of drinkLines) {
           const lineTotal = item.qty * item.price;
-          extrasSubtotal += lineTotal;
+          drinksSubtotal += lineTotal;
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${item.name}</td>
             <td>${item.qty}</td>
             <td>${fmt(lineTotal)}</td>
           `;
-          extrasRows.appendChild(tr);
+          drinksRows.appendChild(tr);
         }
       } else {
-        extrasSection.style.display = "none";
+        drinksSection.style.display = "none";
       }
 
-      const subtotal = sandwichSubtotal + extrasSubtotal;
+      const subtotal = foodSubtotal + drinksSubtotal;
       const serviceFee = subtotal * 0.15;
-      const tax = subtotal * 0.08;
-      const grandTotal = subtotal + serviceFee + tax;
+      const hst = subtotal * 0.13;
+      const grandTotal = subtotal + serviceFee + hst;
 
       const totalsRows = document.getElementById("totalsRows");
       totalsRows.innerHTML = `
         <tr><td>Subtotal</td><td>${fmt(subtotal)}</td></tr>
         <tr><td>Service Fee (15%)</td><td>${fmt(serviceFee)}</td></tr>
-        <tr><td>Estimated Tax (8%)</td><td>${fmt(tax)}</td></tr>
+        <tr><td>HST (13%)</td><td>${fmt(hst)}</td></tr>
         <tr class="total-row"><td>Estimated Total</td><td>${fmt(grandTotal)}</td></tr>
       `;
 
-      const totalSandwichQty = orderLines.reduce((s, l) => s + l.qty, 0);
+      const totalFoodQty = orderLines.reduce((s, l) => s + l.qty, 0);
       document.getElementById("summaryBanner").textContent =
-        `${totalSandwichQty} sandwiches for ${total} people — estimated total: ${fmt(grandTotal)}`;
+        `${totalFoodQty} items for ${total} people — estimated total: ${fmt(grandTotal)} CAD`;
 
       resultsEl.style.display = "block";
       resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
