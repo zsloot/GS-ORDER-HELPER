@@ -4,25 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gold Standard — Catering Order Helper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #faf9f6;
-      --surface: #ffffff;
-      --text: #1a1a1a;
-      --text2: #555;
-      --accent: #2d6a4f;
-      --accent-light: #d8f3dc;
-      --border: #ddd;
-      --error: #c0392b;
-      --shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'Jost', 'Futura', 'Century Gothic', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
       line-height: 1.5;
       padding: 1rem;
     }
@@ -31,45 +22,47 @@
 
     header {
       text-align: center;
-      padding: 1.5rem 0 1.25rem;
+      padding: 1.5rem 0 1rem;
     }
 
     header img {
-      max-width: 280px;
+      max-width: 420px;
+      width: 100%;
       height: auto;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
-    header p {
-      color: var(--text2);
-      margin-top: 0.25rem;
-      font-size: 0.95rem;
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      line-height: 1.1;
     }
 
     .disclaimer {
-      background: #fff8e1;
-      border: 1px solid #ffe082;
-      border-radius: 8px;
+      background: #fff;
+      border: 1px solid #000;
       padding: 0.75rem 1rem;
       margin-bottom: 1.25rem;
       font-size: 0.8rem;
-      color: #6d4c00;
+      color: #555;
       line-height: 1.45;
     }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #000;
       padding: 1.5rem;
       margin-bottom: 1.25rem;
-      box-shadow: var(--shadow);
     }
 
     .card h2 {
       font-size: 1.1rem;
+      font-weight: 700;
       margin-bottom: 1rem;
-      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     .form-row {
@@ -89,105 +82,86 @@
       font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 0.25rem;
-      color: var(--text2);
+      color: #555;
     }
 
     input[type="number"], input[type="date"], input[type="time"], input[type="text"], select {
       padding: 0.5rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid #000;
+      font-family: inherit;
       font-size: 1rem;
       width: 100%;
-      background: var(--bg);
+      background: #fff;
     }
 
     input:focus, select:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent-light);
+      border-color: #000;
+      box-shadow: 0 0 0 1px #000;
     }
 
-    .sub-grid {
+    .item-grid {
       display: grid;
       grid-template-columns: 1fr auto auto;
       gap: 0.5rem 0.75rem;
       align-items: center;
     }
 
-    .sub-grid .sub-header {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text2);
+    .item-grid .grid-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #555;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.05em;
       padding-bottom: 0.25rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #ddd;
     }
 
-    .sub-name { font-size: 0.9rem; }
-    .sub-name small { color: var(--text2); font-size: 0.8rem; }
+    .item-name { font-size: 0.9rem; }
+    .item-name small { color: #888; font-size: 0.8rem; }
+    .item-desc-text {
+      display: block;
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.1rem;
+      line-height: 1.3;
+    }
 
-    .sub-price {
+    .item-price {
       font-size: 0.85rem;
-      color: var(--text2);
+      color: #555;
       text-align: right;
       white-space: nowrap;
     }
 
-    .sub-qty {
+    .item-qty {
       width: 60px;
       padding: 0.35rem 0.5rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      border: 1px solid #000;
+      font-family: inherit;
       font-size: 0.9rem;
       text-align: center;
-      background: var(--bg);
+      background: #fff;
     }
 
-    .sub-qty:focus {
+    .item-qty:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent-light);
+      box-shadow: 0 0 0 1px #000;
     }
 
     .diet-tag {
       display: inline-block;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
       padding: 0.05rem 0.3rem;
-      border-radius: 3px;
       margin-left: 0.3rem;
       vertical-align: middle;
+      border: 1px solid;
     }
 
-    .tag-v { background: #d8f3dc; color: #2d6a4f; }
-    .tag-vg { background: #fde2c8; color: #b35e1c; }
+    .tag-v { background: #d8f3dc; color: #2d6a4f; border-color: #2d6a4f; }
+    .tag-vg { background: #fde2c8; color: #b35e1c; border-color: #b35e1c; }
 
-    .drink-grid {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 0.5rem 0.75rem;
-      align-items: center;
-    }
-
-    .defaults-display {
-      background: var(--accent-light);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-      color: var(--accent);
-    }
-
-    .defaults-display strong { font-weight: 700; }
-
-    .defaults-display .def-line {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.15rem 0;
-    }
-
-    /* Checkbox row */
     .check-row {
       display: flex;
       align-items: center;
@@ -197,7 +171,7 @@
     }
 
     .check-row input[type="checkbox"] {
-      accent-color: var(--accent);
+      accent-color: #000;
       width: 18px;
       height: 18px;
     }
@@ -211,54 +185,50 @@
       display: none;
       margin-top: 0.75rem;
       padding-top: 0.75rem;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid #ddd;
     }
 
     .delivery-fields.visible { display: block; }
 
     .delivery-note {
       font-size: 0.8rem;
-      color: var(--text2);
+      color: #555;
       font-style: italic;
       margin-top: 0.5rem;
       line-height: 1.4;
     }
 
-    /* Buttons */
-    .btn {
+    .btn-request {
       display: block;
       width: 100%;
-      padding: 0.75rem;
-      background: var(--accent);
+      padding: 0.85rem;
+      background: #1a1a1a;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: background 0.15s;
-    }
-
-    .btn:hover { background: #235a3f; }
-
-    .btn-request {
-      background: #1a1a1a;
-      margin-top: 1rem;
+      font-family: inherit;
       font-size: 1.05rem;
-      padding: 0.85rem;
-      letter-spacing: 0.02em;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
     }
 
     .btn-request:hover { background: #333; }
 
     .error-msg {
-      color: var(--error);
+      color: #c0392b;
       font-size: 0.85rem;
       margin-top: 0.5rem;
     }
 
-    #results { display: none; }
+    /* Suggested Order */
+    .order-empty {
+      color: #999;
+      font-size: 0.9rem;
+      padding: 1rem 0;
+      text-align: center;
+    }
 
     .order-table {
       width: 100%;
@@ -267,37 +237,31 @@
 
     .order-table th, .order-table td {
       text-align: left;
-      padding: 0.45rem 0.5rem;
+      padding: 0.4rem 0.5rem;
       border-bottom: 1px solid #eee;
       font-size: 0.9rem;
     }
 
     .order-table th {
-      font-weight: 600;
-      color: var(--text2);
-      font-size: 0.8rem;
+      font-weight: 700;
+      color: #555;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.05em;
     }
 
     .order-table td:nth-child(2), .order-table th:nth-child(2) { text-align: center; }
+    .order-table td:nth-child(3), .order-table th:nth-child(3) { text-align: right; }
     .order-table td:last-child, .order-table th:last-child { text-align: right; }
-
-    .order-table .item-desc {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text2);
-      margin-top: 0.1rem;
-    }
 
     .totals-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
     }
 
     .totals-table td {
-      padding: 0.3rem 0.5rem;
+      padding: 0.25rem 0.5rem;
       font-size: 0.9rem;
     }
 
@@ -307,46 +271,36 @@
     }
 
     .totals-table .total-row td {
-      font-weight: 700;
-      font-size: 1.05rem;
-      border-top: 2px solid var(--accent);
+      font-weight: 800;
+      font-size: 1.1rem;
+      border-top: 2px solid #000;
       padding-top: 0.5rem;
-      color: var(--accent);
     }
 
-    .summary-banner {
-      background: var(--accent-light);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-      color: var(--accent);
-      font-weight: 600;
+    .total-items {
+      text-align: right;
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #ddd;
     }
+
+    .total-items strong { color: #1a1a1a; }
 
     .note {
       font-size: 0.8rem;
-      color: var(--text2);
+      color: #555;
       margin-top: 0.75rem;
       font-style: italic;
     }
 
-    .order-section { margin-bottom: 1rem; }
-
-    .order-section h3 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text2);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
     @media (max-width: 500px) {
+      header h1 { font-size: 1.8rem; }
+      header img { max-width: 300px; }
       .form-row { flex-direction: column; }
-      .sub-grid { grid-template-columns: 1fr auto; }
-      .sub-price { display: none; }
-      .drink-grid { grid-template-columns: 1fr auto; }
+      .item-grid { grid-template-columns: 1fr auto; }
+      .item-price { display: none; }
     }
   </style>
 </head>
@@ -354,7 +308,7 @@
   <div class="container">
     <header>
       <img src="logo.png" alt="Gold Standard">
-      <p>Catering Order Helper</p>
+      <h1>Catering Order Helper</h1>
     </header>
 
     <div class="disclaimer">
@@ -364,66 +318,62 @@
 
     <!-- Group size -->
     <div class="card">
-      <h2>Group Details</h2>
+      <h2>Group Size</h2>
       <div class="form-row">
         <div class="field">
-          <label for="totalPeople">Total People</label>
-          <input type="number" id="totalPeople" min="1" max="500" value="20" oninput="updateDefaults()">
+          <label for="groupSize">Number of People</label>
+          <input type="number" id="groupSize" min="1" max="500" value="20" oninput="recalcDefaults()">
         </div>
         <div class="field">
           <label for="perPerson">Sandwiches per Person</label>
-          <select id="perPerson" onchange="updateDefaults()">
-            <option value="1">1 (light)</option>
-            <option value="1.5" selected>1.5 (recommended)</option>
-            <option value="2">2 (hearty)</option>
-          </select>
+          <input type="number" id="perPerson" min="0.1" max="5" step="0.1" value="1" oninput="recalcDefaults()">
         </div>
         <div class="field">
           <label for="veganCount">Vegan Orders</label>
-          <input type="number" id="veganCount" min="0" value="0" oninput="updateDefaults()">
+          <input type="number" id="veganCount" min="0" value="0" oninput="recalcDefaults()">
         </div>
       </div>
-
-      <div id="defaultsDisplay" class="defaults-display" style="margin-top:1rem;"></div>
     </div>
 
-    <!-- Meat substitutions -->
+    <!-- Meat options -->
     <div class="card">
-      <h2>Meat Substitutions</h2>
-      <p class="note" style="margin-top:0;margin-bottom:0.75rem;">
-        Each item added here replaces one Gold Standard (Bacon) from the default order.
-      </p>
-      <div class="sub-grid">
-        <span class="sub-header">Item</span>
-        <span class="sub-header" style="text-align:right;">Price</span>
-        <span class="sub-header" style="text-align:center;">Qty</span>
+      <h2>Meat Options</h2>
+      <div class="item-grid">
+        <span class="grid-header">Item</span>
+        <span class="grid-header" style="text-align:right;">Price</span>
+        <span class="grid-header" style="text-align:center;">Qty</span>
       </div>
-      <div class="sub-grid" id="meatSubs"></div>
+      <div class="item-grid" id="meatOptions"></div>
     </div>
 
-    <!-- Vegetarian substitutions -->
+    <!-- Vegetarian options -->
     <div class="card">
-      <h2>Vegetarian Substitutions</h2>
-      <p class="note" style="margin-top:0;margin-bottom:0.75rem;">
-        Each item added here replaces one default vegetarian sandwich.
-      </p>
-      <div class="sub-grid">
-        <span class="sub-header">Item</span>
-        <span class="sub-header" style="text-align:right;">Price</span>
-        <span class="sub-header" style="text-align:center;">Qty</span>
+      <h2>Vegetarian Options</h2>
+      <div class="item-grid">
+        <span class="grid-header">Item</span>
+        <span class="grid-header" style="text-align:right;">Price</span>
+        <span class="grid-header" style="text-align:center;">Qty</span>
       </div>
-      <div class="sub-grid" id="vegSubs"></div>
+      <div class="item-grid" id="vegOptions"></div>
     </div>
 
     <!-- Drinks -->
     <div class="card">
-      <h2>Drinks (Optional)</h2>
-      <div class="drink-grid">
-        <span class="sub-header">Drink</span>
-        <span class="sub-header" style="text-align:right;">Price</span>
-        <span class="sub-header" style="text-align:center;">Qty</span>
+      <h2>Add Drinks</h2>
+      <div class="item-grid">
+        <span class="grid-header">Drink</span>
+        <span class="grid-header" style="text-align:right;">Price</span>
+        <span class="grid-header" style="text-align:center;">Qty</span>
       </div>
-      <div class="drink-grid" id="drinksGrid"></div>
+      <div class="item-grid" id="drinksGrid"></div>
+    </div>
+
+    <!-- Suggested Order (live) -->
+    <div class="card">
+      <h2>Suggested Order</h2>
+      <div id="suggestedOrder">
+        <p class="order-empty">Adjust quantities above to build your order.</p>
+      </div>
     </div>
 
     <!-- Pickup / Delivery -->
@@ -457,67 +407,34 @@
       </div>
     </div>
 
-    <button class="btn" onclick="generateOrder()">Generate Order</button>
+    <button class="btn-request" onclick="requestOrder()">Request Order</button>
     <div id="errorMsg" class="error-msg"></div>
 
-    <!-- Results -->
-    <div id="results">
-      <div class="card">
-        <h2>Your Order</h2>
-        <div id="summaryBanner" class="summary-banner"></div>
-
-        <div class="order-section">
-          <h3>Food</h3>
-          <div style="overflow-x:auto;">
-            <table class="order-table">
-              <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
-              <tbody id="foodRows"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="drinksSection" class="order-section" style="display:none;">
-          <h3>Drinks</h3>
-          <div style="overflow-x:auto;">
-            <table class="order-table">
-              <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
-              <tbody id="drinkRows"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="order-section">
-          <h3>Pricing</h3>
-          <table class="totals-table">
-            <tbody id="totalsRows"></tbody>
-          </table>
-        </div>
-
-        <p class="note">
-          All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.
-        </p>
-
-        <button class="btn btn-request" onclick="requestOrder()">REQUEST ORDER</button>
-      </div>
-    </div>
+    <p class="note" style="margin-top:1rem;">
+      All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.
+    </p>
   </div>
 
   <script>
-    let MEAT_RATIO, VEG_RATIO, KALE_SHARE, IMPOSSIBLE_SHARE;
-    let DEFAULTS, MEAT_SUBS, VEG_SUBS, DRINKS;
+    let MEAT_RATIO, KALE_SHARE, IMPOSSIBLE_SHARE;
+    let DEFAULTS, ALL_MEAT, ALL_VEG, DRINKS;
+    let lastOrder = null;
 
     function fmt(n) { return "$" + n.toFixed(2); }
+    function getVal(id) { return parseInt(document.getElementById(id).value) || 0; }
+    function getFloat(id) { return parseFloat(document.getElementById(id).value) || 0; }
 
-    function buildSubRows(container, items) {
+    function buildItemRows(container, items) {
       container.innerHTML = "";
       for (const item of items) {
         const label = item.note ? `${item.name} <small>(${item.note})</small>` : item.name;
         const tagHtml = item.tag === "v" ? ' <span class="diet-tag tag-v">V</span>'
                       : item.tag === "vg" ? ' <span class="diet-tag tag-vg">VG</span>' : "";
+        const descHtml = item.desc ? `<span class="item-desc-text">${item.desc}</span>` : "";
         container.innerHTML += `
-          <span class="sub-name">${label}${tagHtml}</span>
-          <span class="sub-price">${fmt(item.price)}</span>
-          <input type="number" class="sub-qty" id="sub_${item.id}" min="0" value="0" oninput="updateDefaults()">
+          <span class="item-name">${label}${tagHtml}${descHtml}</span>
+          <span class="item-price">${fmt(item.price)}</span>
+          <input type="number" class="item-qty" id="qty_${item.id}" min="0" value="0" oninput="updateSuggestedOrder()">
         `;
       }
     }
@@ -527,173 +444,137 @@
       for (const item of items) {
         const label = item.note ? `${item.name} <small>(${item.note})</small>` : item.name;
         container.innerHTML += `
-          <span class="sub-name">${label}</span>
-          <span class="sub-price">${fmt(item.price)}</span>
-          <input type="number" class="sub-qty" id="drink_${item.id}" min="0" value="0">
+          <span class="item-name">${label}</span>
+          <span class="item-price">${fmt(item.price)}</span>
+          <input type="number" class="item-qty" id="drink_${item.id}" min="0" value="0" oninput="updateSuggestedOrder()">
         `;
       }
     }
-
-    function getVal(id) { return parseInt(document.getElementById(id).value) || 0; }
 
     function toggleDelivery() {
       const el = document.getElementById("deliveryFields");
       el.classList.toggle("visible", document.getElementById("requestDelivery").checked);
     }
 
-    function calcDefaults() {
-      const total = getVal("totalPeople");
-      const ratio = parseFloat(document.getElementById("perPerson").value);
+    function recalcDefaults() {
+      const total = getVal("groupSize");
+      const perPerson = getFloat("perPerson");
       const veganCount = getVal("veganCount");
 
-      const totalItems = Math.ceil(total * ratio);
-      const veganItems = Math.ceil(veganCount * ratio);
+      const totalItems = Math.ceil(total * perPerson);
+      const veganItems = Math.min(Math.ceil(veganCount * perPerson), totalItems);
       const remaining = Math.max(0, totalItems - veganItems);
 
-      let meatDefault = Math.round(remaining * MEAT_RATIO);
-      let vegDefault = remaining - meatDefault;
+      const meatCount = Math.round(remaining * MEAT_RATIO);
+      const vegCount = remaining - meatCount;
+      const kaleCount = Math.round(vegCount * KALE_SHARE);
+      const impCount = vegCount - kaleCount;
 
-      let meatSubTotal = 0;
-      for (const s of MEAT_SUBS) meatSubTotal += getVal("sub_" + s.id);
-      meatDefault = Math.max(0, meatDefault - meatSubTotal);
+      const setQty = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      };
 
-      let vegSubTotal = 0;
-      for (const s of VEG_SUBS) vegSubTotal += getVal("sub_" + s.id);
-      vegDefault = Math.max(0, vegDefault - vegSubTotal);
+      setQty("qty_def_meat", meatCount);
+      setQty("qty_def_kale", kaleCount);
+      setQty("qty_def_impossible", impCount);
+      setQty("qty_def_vegan", veganItems);
 
-      let kaleCount = Math.round(vegDefault * KALE_SHARE);
-      let impCount = vegDefault - kaleCount;
-
-      return { totalItems, veganItems, meatDefault, kaleCount, impCount, meatSubTotal, vegSubTotal, vegDefault };
+      updateSuggestedOrder();
     }
 
-    function updateDefaults() {
-      const d = calcDefaults();
-      const el = document.getElementById("defaultsDisplay");
-      el.innerHTML = `
-        <div class="def-line"><span><strong>Total items:</strong> ${d.totalItems}</span></div>
-        <div class="def-line"><span>Meat — GS Bacon: ${d.meatDefault}</span><span>${fmt(d.meatDefault * DEFAULTS.meat.price)}</span></div>
-        <div class="def-line"><span>Vegetarian — GS Kale: ${d.kaleCount}, GS Impossible: ${d.impCount}</span><span>${fmt(d.kaleCount * DEFAULTS.kale.price + d.impCount * DEFAULTS.impossible.price)}</span></div>
-        ${d.veganItems > 0 ? `<div class="def-line"><span>Vegan — The Alternative: ${d.veganItems}</span><span>${fmt(d.veganItems * DEFAULTS.vegan.price)}</span></div>` : ""}
-        ${d.meatSubTotal > 0 ? `<div class="def-line"><span style="font-size:0.8rem;">↳ ${d.meatSubTotal} meat sub(s) applied</span></div>` : ""}
-        ${d.vegSubTotal > 0 ? `<div class="def-line"><span style="font-size:0.8rem;">↳ ${d.vegSubTotal} vegetarian sub(s) applied</span></div>` : ""}
-      `;
-    }
-
-    let lastOrder = null;
-
-    function generateOrder() {
-      const errorEl = document.getElementById("errorMsg");
-      const resultsEl = document.getElementById("results");
-      errorEl.textContent = "";
-      resultsEl.style.display = "none";
-
-      const total = getVal("totalPeople");
-      const ratio = parseFloat(document.getElementById("perPerson").value);
-      const veganCount = getVal("veganCount");
-
-      if (total < 1) { errorEl.textContent = "Enter at least 1 person."; return; }
-      if (veganCount > total) { errorEl.textContent = "Vegan count exceeds total people."; return; }
-
-      const pickupDate = document.getElementById("pickupDate").value;
-      const pickupTime = document.getElementById("pickupTime").value;
-      if (!pickupDate) { errorEl.textContent = "Please select a pickup date."; return; }
-      if (!pickupTime) { errorEl.textContent = "Please select a pickup time."; return; }
-
-      const d = calcDefaults();
+    function updateSuggestedOrder() {
       const lines = [];
 
-      if (d.meatDefault > 0) {
-        lines.push({ name: DEFAULTS.meat.name, desc: DEFAULTS.meat.desc, qty: d.meatDefault, price: DEFAULTS.meat.price, tags: [] });
+      for (const item of ALL_MEAT) {
+        const qty = getVal("qty_" + item.id);
+        if (qty > 0) lines.push({ name: item.name, note: item.note, qty, price: item.price, tag: item.tag });
       }
-      for (const s of MEAT_SUBS) {
-        const qty = getVal("sub_" + s.id);
-        if (qty > 0) lines.push({ name: s.name, desc: s.note || "", qty, price: s.price, tags: [] });
-      }
-      if (d.kaleCount > 0) {
-        lines.push({ name: DEFAULTS.kale.name, desc: DEFAULTS.kale.desc, qty: d.kaleCount, price: DEFAULTS.kale.price, tags: ["v"] });
-      }
-      if (d.impCount > 0) {
-        lines.push({ name: DEFAULTS.impossible.name, desc: DEFAULTS.impossible.desc, qty: d.impCount, price: DEFAULTS.impossible.price, tags: ["v"] });
-      }
-      for (const s of VEG_SUBS) {
-        const qty = getVal("sub_" + s.id);
-        if (qty > 0) lines.push({ name: s.name, desc: s.note || "", qty, price: s.price, tags: ["v"] });
-      }
-      if (d.veganItems > 0) {
-        lines.push({ name: DEFAULTS.vegan.name, desc: DEFAULTS.vegan.desc, qty: d.veganItems, price: DEFAULTS.vegan.price, tags: ["vg"] });
+      for (const item of ALL_VEG) {
+        const qty = getVal("qty_" + item.id);
+        if (qty > 0) lines.push({ name: item.name, note: item.note, qty, price: item.price, tag: item.tag });
       }
 
-      const foodRows = document.getElementById("foodRows");
-      foodRows.innerHTML = "";
+      const drinkLines = [];
+      for (const dk of DRINKS) {
+        const qty = getVal("drink_" + dk.id);
+        if (qty > 0) drinkLines.push({ name: dk.name, qty, price: dk.price });
+      }
+
+      const container = document.getElementById("suggestedOrder");
+      const allEmpty = lines.length === 0 && drinkLines.length === 0;
+
+      if (allEmpty) {
+        container.innerHTML = '<p class="order-empty">Adjust quantities above to build your order.</p>';
+        lastOrder = null;
+        return;
+      }
+
       let foodTotal = 0;
-      let foodQty = 0;
+      let totalItems = 0;
+      let html = '<div style="overflow-x:auto;"><table class="order-table"><thead><tr><th>Item</th><th>Qty</th><th>Each</th><th>Price</th></tr></thead><tbody>';
 
       for (const line of lines) {
         const linePrice = line.qty * line.price;
         foodTotal += linePrice;
-        foodQty += line.qty;
-        const tagHtml = line.tags.map(t => {
-          const cls = t === "v" ? "tag-v" : "tag-vg";
-          const lbl = t === "v" ? "V" : "VG";
-          return `<span class="diet-tag ${cls}">${lbl}</span>`;
-        }).join("");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${line.name}${tagHtml}${line.desc ? `<span class="item-desc">${line.desc}</span>` : ""}</td>
-          <td>${line.qty}</td>
-          <td>${fmt(linePrice)}</td>
-        `;
-        foodRows.appendChild(tr);
+        totalItems += line.qty;
+        const tagHtml = line.tag === "v" ? ' <span class="diet-tag tag-v">V</span>'
+                      : line.tag === "vg" ? ' <span class="diet-tag tag-vg">VG</span>' : "";
+        const noteHtml = line.note ? ` <small style="color:#888;">(${line.note})</small>` : "";
+        html += `<tr><td>${line.name}${noteHtml}${tagHtml}</td><td>${line.qty}</td><td>${fmt(line.price)}</td><td>${fmt(linePrice)}</td></tr>`;
       }
 
-      const drinkRowsEl = document.getElementById("drinkRows");
-      const drinksSection = document.getElementById("drinksSection");
-      drinkRowsEl.innerHTML = "";
       let drinksTotal = 0;
-      let hasDrinks = false;
-      const drinkLines = [];
-
-      for (const dk of DRINKS) {
-        const qty = getVal("drink_" + dk.id);
-        if (qty > 0) {
-          hasDrinks = true;
-          const linePrice = qty * dk.price;
+      if (drinkLines.length > 0) {
+        html += '<tr><td colspan="4" style="padding:0.5rem 0;border:none;"></td></tr>';
+        for (const dk of drinkLines) {
+          const linePrice = dk.qty * dk.price;
           drinksTotal += linePrice;
-          drinkLines.push({ name: dk.name, qty, price: dk.price });
-          const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${dk.name}</td><td>${qty}</td><td>${fmt(linePrice)}</td>`;
-          drinkRowsEl.appendChild(tr);
+          totalItems += dk.qty;
+          html += `<tr><td>${dk.name}</td><td>${dk.qty}</td><td>${fmt(dk.price)}</td><td>${fmt(linePrice)}</td></tr>`;
         }
       }
-      drinksSection.style.display = hasDrinks ? "block" : "none";
+
+      html += '</tbody></table></div>';
 
       const subtotal = foodTotal + drinksTotal;
       const hst = subtotal * 0.13;
       const serviceFee = (subtotal + hst) * 0.18;
       const grandTotal = subtotal + hst + serviceFee;
 
-      document.getElementById("totalsRows").innerHTML = `
-        <tr><td>Subtotal</td><td>${fmt(subtotal)}</td></tr>
-        <tr><td>HST (13%)</td><td>${fmt(hst)}</td></tr>
-        <tr><td>Service Fee (18%)</td><td>${fmt(serviceFee)}</td></tr>
-        <tr class="total-row"><td>Estimated Total</td><td>${fmt(grandTotal)}</td></tr>
+      html += `
+        <table class="totals-table">
+          <tr><td>Subtotal</td><td>${fmt(subtotal)}</td></tr>
+          <tr><td>HST (13%)</td><td>${fmt(hst)}</td></tr>
+          <tr><td>Service Fee (18%)</td><td>${fmt(serviceFee)}</td></tr>
+          <tr class="total-row"><td>Estimated Total</td><td>${fmt(grandTotal)}</td></tr>
+        </table>
+        <div class="total-items"><strong>Total Items: ${totalItems}</strong></div>
       `;
 
-      document.getElementById("summaryBanner").textContent =
-        `${foodQty} food items for ${total} people — estimated total: ${fmt(grandTotal)} CAD`;
+      container.innerHTML = html;
 
-      lastOrder = { lines, drinkLines, total, foodQty, subtotal, hst, serviceFee, grandTotal };
-
-      resultsEl.style.display = "block";
-      resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      lastOrder = {
+        lines, drinkLines, totalItems,
+        total: getVal("groupSize"),
+        subtotal, hst, serviceFee, grandTotal
+      };
     }
 
     function requestOrder() {
-      if (!lastOrder) return;
+      const errorEl = document.getElementById("errorMsg");
+      errorEl.textContent = "";
+
+      if (!lastOrder || lastOrder.totalItems === 0) {
+        errorEl.textContent = "Add at least one item to your order.";
+        return;
+      }
 
       const pickupDate = document.getElementById("pickupDate").value;
       const pickupTime = document.getElementById("pickupTime").value;
+      if (!pickupDate) { errorEl.textContent = "Please select a pickup date."; return; }
+      if (!pickupTime) { errorEl.textContent = "Please select a pickup time."; return; }
+
       const isDelivery = document.getElementById("requestDelivery").checked;
       const deliveryAddr = document.getElementById("deliveryAddress").value;
 
@@ -717,9 +598,7 @@
       orderDetails += `Estimated Total: ${fmt(lastOrder.grandTotal)} CAD\n`;
 
       const body = `Hey! I'd like to request a catering order for the following:\n\n${pickupStr}\n\n${orderDetails}\nThanks so much, looking forward to hearing back from you.`;
-
       const mailtoUrl = `mailto:goldstandard@thefed.ca?subject=${encodeURIComponent("CATERING REQUEST")}&body=${encodeURIComponent(body)}`;
-
       window.location.href = mailtoUrl;
     }
 
@@ -735,19 +614,28 @@
         const menu = await res.json();
 
         MEAT_RATIO = menu.ratios.meat;
-        VEG_RATIO = menu.ratios.vegetarian;
         KALE_SHARE = menu.ratios.kaleShare;
         IMPOSSIBLE_SHARE = menu.ratios.impossibleShare;
-
         DEFAULTS = menu.defaults;
-        MEAT_SUBS = menu.meatSubs;
-        VEG_SUBS = menu.vegSubs;
+
+        ALL_MEAT = [
+          { id: "def_meat", name: DEFAULTS.meat.name, desc: DEFAULTS.meat.desc, price: DEFAULTS.meat.price },
+          ...menu.meatSubs
+        ];
+
+        ALL_VEG = [
+          { id: "def_kale", name: DEFAULTS.kale.name, desc: DEFAULTS.kale.desc, price: DEFAULTS.kale.price, tag: DEFAULTS.kale.tag },
+          { id: "def_impossible", name: DEFAULTS.impossible.name, desc: DEFAULTS.impossible.desc, price: DEFAULTS.impossible.price, tag: DEFAULTS.impossible.tag },
+          { id: "def_vegan", name: DEFAULTS.vegan.name, desc: DEFAULTS.vegan.desc, price: DEFAULTS.vegan.price, tag: DEFAULTS.vegan.tag },
+          ...menu.vegSubs
+        ];
+
         DRINKS = menu.drinks;
 
-        buildSubRows(document.getElementById("meatSubs"), MEAT_SUBS);
-        buildSubRows(document.getElementById("vegSubs"), VEG_SUBS);
+        buildItemRows(document.getElementById("meatOptions"), ALL_MEAT);
+        buildItemRows(document.getElementById("vegOptions"), ALL_VEG);
         buildDrinkRows(document.getElementById("drinksGrid"), DRINKS);
-        updateDefaults();
+        recalcDefaults();
         initDate();
       } catch (e) {
         document.querySelector(".container").innerHTML =
