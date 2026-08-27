@@ -153,8 +153,8 @@
     }
 
     .qty-btn {
-      width: 26px;
-      height: 26px;
+      width: 21px;
+      height: 21px;
       border: 1px solid #000;
       background: #fff;
       font-family: inherit;
@@ -175,8 +175,8 @@
     .qty-btn:active { background: #e0e0e0; }
 
     .qty-val {
-      width: 28px;
-      height: 26px;
+      width: 22px;
+      height: 21px;
       border: 1px solid #000;
       border-left: none;
       border-right: none;
@@ -557,28 +557,6 @@
     .footer-stat { white-space: nowrap; }
     .footer-total { font-weight: 700; font-size: 0.95rem; }
 
-    /* ── Sticky star logo ── */
-    .sticky-star {
-      position: fixed;
-      top: 0.5rem;
-      left: 0.75rem;
-      z-index: 50;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      pointer-events: none;
-    }
-
-    .sticky-star.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .sticky-star img {
-      width: 108px;
-      height: 108px;
-    }
-
     /* ── Mobile ── */
     @media (max-width: 500px) {
       header h1 { font-size: 1.8rem; }
@@ -592,9 +570,6 @@
   </style>
 </head>
 <body>
-  <div class="sticky-star" id="stickyStar">
-    <img src="GS-star.png" alt="GS">
-  </div>
   <div class="container">
     <header>
       <img src="logo.png" alt="Gold Standard">
@@ -605,7 +580,7 @@
       Prices shown are estimates and may have changed since this page was published.
       This is a request only — no order will be placed without confirmation from our team.
       <br><br>
-      Unfortunately we aren't able to fulfil all catering requests, but we will do our best,
+      Unfortunately we aren't able to fulfill all catering requests, but we will do our best,
       and always appreciate the inquiry.
     </div>
 
@@ -1144,17 +1119,6 @@
       observer.observe(sentinel);
     }
 
-    function setupStarObserver() {
-      var logo = document.querySelector("header img");
-      var star = document.getElementById("stickyStar");
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          star.classList.toggle("visible", !entry.isIntersecting);
-        });
-      }, { threshold: 0 });
-      observer.observe(logo);
-    }
-
     function initDate() {
       var tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1192,7 +1156,6 @@
         recalcDefaults();
         initDate();
         setupFooterObserver();
-        setupStarObserver();
       } catch (e) {
         document.querySelector(".container").innerHTML =
           '<p style="color:red;text-align:center;padding:2rem;">Failed to load menu data. Please refresh the page.</p>';
