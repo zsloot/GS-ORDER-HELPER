@@ -643,6 +643,7 @@
       <div id="suggestedOrder">
         <p class="order-empty">Adjust quantities above to build your order.</p>
       </div>
+      <div id="orderBottomSentinel"></div>
     </div>
 
     <!-- Pickup / Delivery -->
@@ -1110,14 +1111,14 @@
     }
 
     function setupFooterObserver() {
-      var orderCard = document.getElementById("suggestedOrder").closest(".card");
+      var sentinel = document.getElementById("orderBottomSentinel");
       var footer = document.getElementById("stickyFooter");
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           footer.classList.toggle("hidden", entry.isIntersecting);
         });
-      }, { threshold: 0.1 });
-      observer.observe(orderCard);
+      }, { threshold: 0 });
+      observer.observe(sentinel);
     }
 
     function initDate() {
