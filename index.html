@@ -651,20 +651,28 @@
             <button type="button" class="qty-btn" onclick="changeOrderField('perPerson',0.1)">+</button>
           </div>
         </div>
-        <div class="field">
-          <label for="veganCount">Vegan Orders</label>
-          <div class="order-stepper">
-            <button type="button" class="qty-btn" onclick="changeOrderField('veganCount',-1)">−</button>
-            <input type="number" id="veganCount" min="0" value="0" oninput="recalcDefaults()">
-            <button type="button" class="qty-btn" onclick="changeOrderField('veganCount',1)">+</button>
-          </div>
-        </div>
       </div>
       <p class="helper-text">Your suggested order will appear below. Meat to veg ratios based on stats from in store orders.</p>
       <div class="pin-toggle">
         <label class="switch"><input type="checkbox" id="pinTotal"><span class="slider"></span></label>
         <span class="pin-toggle-label">Pin Total — <em>keep sandwich count fixed while swapping items</em></span>
       </div>
+    </div>
+
+    <!-- Dietary restrictions -->
+    <div class="card">
+      <h2>Dietary Restrictions</h2>
+      <div id="dietaryList">
+        <div class="dietary-row" id="veganDietaryRow">
+          <input type="text" class="dietary-name" value="Vegan" readonly>
+          <div class="qty-stepper">
+            <button type="button" class="qty-btn" onclick="changeDietQtyVegan(this,-1)">−</button>
+            <input type="number" class="qty-val diet-count-input" id="veganCount" value="0" min="0" oninput="recalcDefaults(); updateSuggestedOrder()">
+            <button type="button" class="qty-btn" onclick="changeDietQtyVegan(this,1)">+</button>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="add-btn" onclick="addDietaryRow()">+ Add Restriction</button>
     </div>
 
     <!-- Meat options -->
@@ -686,18 +694,6 @@
       <h2>Add Drinks</h2>
       <div class="item-grid" id="drinksGrid"></div>
       <div class="total-items" id="drinksCount" style="display:none;"><strong>Drinks: 0</strong></div>
-    </div>
-
-    <!-- Dietary restrictions -->
-    <div class="card">
-      <h2>Dietary Restrictions</h2>
-      <div id="dietaryList">
-        <div id="veganDietaryRow" class="dietary-row" style="display:none;">
-          <input type="text" class="dietary-name" value="Vegan" readonly>
-          <span class="dietary-count-label" id="veganDietaryCount">0 people</span>
-        </div>
-      </div>
-      <button type="button" class="add-btn" onclick="addDietaryRow()">+ Add Restriction</button>
     </div>
 
     <!-- Suggested order -->
@@ -932,7 +928,6 @@
       setQty("qty_def_impossible", impCount);
       setQty("qty_def_vegan", veganItems);
 
-      updateVeganDietary();
       updateSuggestedOrder();
     }
 
@@ -941,12 +936,12 @@
       if (el) el.value = val;
     }
 
-    function updateVeganDietary() {
-      var count = getVal("veganCount");
-      var row = document.getElementById("veganDietaryRow");
-      var label = document.getElementById("veganDietaryCount");
-      row.style.display = count > 0 ? "flex" : "none";
-      label.textContent = count + (count === 1 ? " person" : " people");
+    function changeDietQtyVegan(btn, delta) {
+      var input = document.getElementById("veganCount");
+      var val = Math.max(0, (parseInt(input.value) || 0) + delta);
+      input.value = val;
+      recalcDefaults();
+      updateSuggestedOrder();
     }
 
     function addDietaryRow() {
