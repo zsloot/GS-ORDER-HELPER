@@ -78,6 +78,7 @@
     .field {
       display: flex;
       flex-direction: column;
+      align-items: center;
       flex: 1;
       min-width: 120px;
     }
@@ -153,8 +154,8 @@
     }
 
     .qty-btn {
-      width: 22px;
-      height: 26px;
+      width: 26px;
+      height: 36px;
       border: 1px solid #000;
       background: #fff;
       font-family: inherit;
@@ -175,8 +176,8 @@
     .qty-btn:active { background: #e0e0e0; }
 
     .qty-val {
-      width: 24px;
-      height: 26px;
+      width: 28px;
+      height: 36px;
       border: 1px solid #000;
       border-left: none;
       border-right: none;
@@ -273,7 +274,8 @@
     .dietary-name {
       flex: 1;
       min-width: 100px;
-      padding: 0.4rem 0.6rem;
+      height: 36px;
+      padding: 0 0.6rem;
       border: 1px solid #000;
       font-family: inherit;
       font-size: 0.9rem;
@@ -594,8 +596,8 @@
       .item-price, .grid-header-price { display: none; }
       .card { padding: 1rem; }
       .order-table th:nth-child(3), .order-table td:nth-child(3) { display: none; }
-      .qty-btn { width: 26px; height: 26px; }
-      .qty-val { height: 26px; }
+      .qty-btn { width: 32px; }
+      .field { align-items: stretch; }
       .field { max-width: 100%; overflow: hidden; }
       .field input[type="date"],
       .field input[type="time"] { min-width: 0; }
