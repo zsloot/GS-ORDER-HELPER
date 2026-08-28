@@ -1060,7 +1060,11 @@
         html += '</div>';
       }
 
-      html += '<div class="total-items"><strong>Total Items: ' + totalItems + '</strong></div>';
+      var orderMeat = 0, orderVeg = 0, orderDrinks = 0;
+      ALL_MEAT.forEach(function(item) { orderMeat += getVal("qty_" + item.id); });
+      ALL_VEG.forEach(function(item) { orderVeg += getVal("qty_" + item.id); });
+      drinkLines.forEach(function(dk) { orderDrinks += dk.qty; });
+      html += '<div class="total-items">Meat: ' + orderMeat + ' &nbsp; Veg: ' + orderVeg + ' &nbsp; Drinks: ' + orderDrinks + ' &nbsp; <strong>Total Items: ' + totalItems + '</strong></div>';
       html += '<p class="note" style="margin-top:0.75rem;">All prices in CAD. Estimates based on current menu — final pricing confirmed by our team.</p>';
 
       container.innerHTML = html;
