@@ -681,21 +681,21 @@
     <div class="card">
       <h2>Meat Options</h2>
       <div class="item-grid" id="meatOptions"></div>
-      <div class="total-items" id="meatCount" style="display:none;"><strong>Meat: 0</strong></div>
+      <div class="total-items" id="meatCount"><strong>Meat: 0</strong></div>
     </div>
 
     <!-- Vegetarian & vegan options -->
     <div class="card">
       <h2>Vegetarian and Vegan Options</h2>
       <div class="item-grid" id="vegOptions"></div>
-      <div class="total-items" id="vegCount" style="display:none;"><strong>Veg: 0</strong></div>
+      <div class="total-items" id="vegCount"><strong>Veg: 0</strong></div>
     </div>
 
     <!-- Drinks -->
     <div class="card">
       <h2>Add Drinks</h2>
       <div class="item-grid" id="drinksGrid"></div>
-      <div class="total-items" id="drinksCount" style="display:none;"><strong>Drinks: 0</strong></div>
+      <div class="total-items" id="drinksCount"><strong>Drinks: 0</strong></div>
     </div>
 
     <!-- Suggested order -->
@@ -1195,17 +1195,9 @@
       document.getElementById("footItems").textContent = "Items: " + totalItems;
       document.getElementById("footTotal").textContent = lastOrder ? fmt(lastOrder.grandTotal) : "$0.00";
 
-      var mc = document.getElementById("meatCount");
-      mc.style.display = meatCount > 0 ? "" : "none";
-      mc.innerHTML = "<strong>Meat: " + meatCount + "</strong>";
-
-      var vc = document.getElementById("vegCount");
-      vc.style.display = vegCount > 0 ? "" : "none";
-      vc.innerHTML = "<strong>Veg: " + vegCount + "</strong>";
-
-      var dc = document.getElementById("drinksCount");
-      dc.style.display = drinkCount > 0 ? "" : "none";
-      dc.innerHTML = "<strong>Drinks: " + drinkCount + "</strong>";
+      document.getElementById("meatCount").innerHTML = "<strong>Meat: " + meatCount + "</strong>";
+      document.getElementById("vegCount").innerHTML = "<strong>Veg: " + vegCount + "</strong>";
+      document.getElementById("drinksCount").innerHTML = "<strong>Drinks: " + drinkCount + "</strong>";
     }
 
     function setupFooterObserver() {
